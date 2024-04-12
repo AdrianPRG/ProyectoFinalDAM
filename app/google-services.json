@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "820995070880",
+    "project_id": "proyectofinaldamadri",
+    "storage_bucket": "proyectofinaldamadri.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820995070880:android:bd997fa05495408ee322c5",
+        "android_client_info": {
+          "package_name": "com.alopgal962.myshowsreviews"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_Pr66MwXz_OLLIsifD934glWrXZRK72A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
