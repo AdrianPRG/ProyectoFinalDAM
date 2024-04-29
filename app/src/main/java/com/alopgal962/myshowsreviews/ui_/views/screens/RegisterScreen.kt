@@ -234,7 +234,10 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                 text = "⚫ Ya tengo una cuenta",
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
-                modifier = Modifier.padding(end = 120.dp, bottom = 30.dp).clickable { navController.navigate(Routes.loginRoute.route) })
+                modifier = Modifier.padding(end = 120.dp, bottom = 30.dp).clickable {
+                    navController.navigate(Routes.loginRoute.route)
+                    registerLoginVM.borrarCampos()
+                })
         }
     }
 }
