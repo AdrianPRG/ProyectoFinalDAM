@@ -1,4 +1,4 @@
-package com.alopgal962.myshowsreviews.viewmodels
+package com.alopgal962.myshowsreviews.shows.shows.viewmodels
 
 import android.annotation.SuppressLint
 import android.util.Log

@@ -1,4 +1,4 @@
-package com.alopgal962.myshowsreviews.model
+package com.alopgal962.myshowsreviews.shows.shows.data.model
 
 class User {
 

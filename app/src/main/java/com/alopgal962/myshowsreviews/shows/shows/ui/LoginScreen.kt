@@ -1,4 +1,4 @@
-package com.alopgal962.myshowsreviews.ui_.views.screens
+package com.alopgal962.myshowsreviews.shows.shows.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -31,15 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.alopgal962.myshowsreviews.R
-import com.alopgal962.myshowsreviews.model.Routes
-import com.alopgal962.myshowsreviews.ui_.views.components.BottomBar
-import com.alopgal962.myshowsreviews.ui_.views.components.Topbar
-import com.alopgal962.myshowsreviews.viewmodels.RegisterLoginVM
+import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(registerLoginVM: RegisterLoginVM, navController: NavController) {
+fun LoginScreen(registerLoginVM: RegisterLoginVM,genericVM: GenericVM ,navController: NavController) {
     Column(
         Modifier
             .fillMaxSize()
@@ -85,7 +82,10 @@ fun LoginScreen(registerLoginVM: RegisterLoginVM, navController: NavController) 
                 modifier = Modifier.padding(top = 35.dp)
             )
             Button(
-                onClick = { registerLoginVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) } },
+                onClick = { registerLoginVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) }
+                    genericVM.obtenerPeliculas()
+
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                 modifier = Modifier
                     .padding(top = 40.dp)
@@ -93,7 +93,9 @@ fun LoginScreen(registerLoginVM: RegisterLoginVM, navController: NavController) 
             ) {
                 Text(text = "Iniciar Sesion", fontSize = 16.sp)
             }
-            Text(text = "⚫ No tengo cuenta", color = Color.White, modifier = Modifier.padding(end = 100.dp, top = 40.dp).clickable { navController.navigate(Routes.registerRoute.route) })
+            Text(text = "⚫ No tengo cuenta", color = Color.White, modifier = Modifier.padding(end = 100.dp, top = 40.dp).clickable {
+                navController.navigate(Routes.registerRoute.route)
+            })
         }
     }
 }

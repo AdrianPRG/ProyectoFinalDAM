@@ -1,4 +1,4 @@
-package com.alopgal962.myshowsreviews.ui_.views.components
+package com.alopgal962.myshowsreviews.shows.shows.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

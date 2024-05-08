@@ -1,4 +1,4 @@
-package com.alopgal962.myshowsreviews.ui_.views.screens
+package com.alopgal962.myshowsreviews.shows.shows.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.alopgal962.myshowsreviews.R
-import com.alopgal962.myshowsreviews.model.Routes
-import com.alopgal962.myshowsreviews.viewmodels.RegisterLoginVM
+import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
