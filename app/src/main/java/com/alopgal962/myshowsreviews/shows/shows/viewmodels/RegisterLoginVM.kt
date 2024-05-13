@@ -2,27 +2,39 @@ package com.alopgal962.myshowsreviews.shows.shows.viewmodels
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alopgal962.myshowsreviews.shows.shows.data.model.User
+import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.getField
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.launch
 
 class RegisterLoginVM : ViewModel() {
 
+    var user = User()
+
+    //Campos usuario
     var imagen by mutableStateOf("")
     var nombre by mutableStateOf("")
     var email by mutableStateOf("")
     var password by mutableStateOf("")
+    var listaAmigos:MutableList<Int>? by mutableStateOf(mutableListOf())
+    var listaPeticiones:MutableList<Int>? by mutableStateOf(mutableListOf())
+    var listaSeries:MutableList<ShowState>? by mutableStateOf(mutableListOf())
 
     var disponible by mutableStateOf(true)
 
+    //Firebase autenticacion
     var VMFireAuth = Firebase.auth
+    //Firebase base de datos
     var VMFireDB = Firebase.firestore
 
     fun registrarme(navegacion: () -> Unit) {
@@ -37,7 +49,10 @@ class RegisterLoginVM : ViewModel() {
                                         "imagen" to imagen,
                                         "nombre" to nombre,
                                         "email" to email,
-                                        "contraseña" to password
+                                        "contraseña" to password,
+                                        "listaAmigos" to listaAmigos,
+                                        "listaPeti" to listaPeticiones,
+                                        "listaSeries" to listaSeries
                                     )
                                 ).addOnCompleteListener{
                                     navegacion()
@@ -58,7 +73,13 @@ fun iniciarsesion(navegacion: () -> Unit) {
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 VMFireAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        navegacion()
+                        VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener {
+                            nombre = it.get("nombre").toString()
+                            navegacion()
+                        }.addOnFailureListener {
+                            Log.d("ERROR-DatosUsuario","Error al obtener los datos de usuario")
+                        }
+
                     } else Log.d(
                         "ERROR-SIGN",
                         "Error al iniciar sesion, email o contraseña incorrectos"
