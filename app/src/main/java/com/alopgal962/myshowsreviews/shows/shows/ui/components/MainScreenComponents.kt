@@ -82,10 +82,16 @@ fun MostrarShowFully(show:ShowState, onExitClick:() -> Unit){
         Column(modifier = Modifier
             .padding(top = 110.dp)
             .fillMaxSize()
-            .background(color = Color(232, 239, 236)), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Serie:  ${show.titulo}", modifier = Modifier.padding(top = 20.dp), color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
-            Column(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+            .background(color = Color(232, 239, 236)), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Text(text = "Serie:  ${show.titulo}", modifier = Modifier.padding(top = 20.dp), color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)) {
                 AsyncImage(model = "https://image.tmdb.org/t/p/w500${show.imagen}", contentDescription = "${show.titulo} / fullyShow / imagen", Modifier.fillMaxSize()) }
+            Column(modifier = Modifier.fillMaxWidth().height(340.dp).background(color = Color(217, 205, 158))) {
+                Text(text = "Descripcion de la serie",color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
+                Text(text = show.descripcion.toString(), modifier = Modifier.padding(top = 12.dp),color = Color.Black, fontFamily = FontFamily.Serif,)
+            }
             Button(onClick = { onExitClick() }) {
                 Text(text = "Volver atras")
             }

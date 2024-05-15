@@ -107,8 +107,9 @@ fun MainScreen(
                     ) {
                         items(lista) {
                             MostrarShow(Show = it,
-                                { navController.navigate("ShowInformation/${it.titulo}")
+                                {
                                     GenericVM.obtenerPelicula(it.titulo.toString())
+                                    navController.navigate("ShowInformation/${it.titulo}")
                                 },
                                 {})
                         }

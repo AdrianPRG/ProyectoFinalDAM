@@ -21,13 +21,13 @@ class ShowRepository {
 
     }
 
-    suspend fun GetInfoShow(nombre:String):ShowState{
+    suspend fun GetInfoShow(nombre:String):ShowsState{
         val response = service.getPelicula(nombre)
         return if (response.isSuccessful) {
-            response.body()!!.toShowState()
+            response.body()!!.toShowsState()
         }
         else{
-            ShowState()
+            ShowsState()
         }
     }
 
