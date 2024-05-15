@@ -1,5 +1,6 @@
 package com.alopgal962.myshowsreviews.shows.shows.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,8 +18,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 
 @Composable
@@ -47,11 +52,14 @@ fun MostrarShow(Show:ShowState, oninfoclick:() -> Unit, onanadirclick:() -> Unit
         }
         Column(
             Modifier.size(220.dp, 110.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = Show.titulo, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold ,fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 10.dp))
-            Text(text = "Puntuacion: " + Show.puntuacion.substring(0,3) + " ⭐ ", Modifier.padding(top = 10.dp), fontSize = 14.sp ,color = Color.White,fontFamily = FontFamily.Serif)
+            Text(text = Show.titulo!!, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold ,fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 10.dp))
+            Text(text = "Puntuacion: " + Show.puntuacion?.substring(0,3) + " ⭐ ", Modifier.padding(top = 10.dp), fontSize = 14.sp ,color = Color.White,fontFamily = FontFamily.Serif)
             Text(text = "Numero de votos: " + Show.votos, Modifier.padding(top = 10.dp) ,fontSize = 14.sp , color = Color.White,fontFamily = FontFamily.Serif)
         }
-        Column(Modifier.padding(bottom = 15.dp).size(220.dp,60.dp)) {
+        Column(
+            Modifier
+                .padding(bottom = 15.dp)
+                .size(220.dp, 60.dp)) {
             Row(modifier = Modifier
                 .fillMaxSize(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically
             ) {
@@ -66,7 +74,22 @@ fun MostrarShow(Show:ShowState, oninfoclick:() -> Unit, onanadirclick:() -> Unit
         }
     }
 }
-
-fun MostrarShowFully(){
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MostrarShowFully(show:ShowState, onExitClick:() -> Unit){
+    Scaffold(topBar = { Topbar() }) {
+        Column(modifier = Modifier
+            .padding(top = 110.dp)
+            .fillMaxSize()
+            .background(color = Color(232, 239, 236)), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "Serie:  ${show.titulo}", modifier = Modifier.padding(top = 20.dp), color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
+            Column(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+                AsyncImage(model = "https://image.tmdb.org/t/p/w500${show.imagen}", contentDescription = "${show.titulo} / fullyShow / imagen", Modifier.fillMaxSize()) }
+            Button(onClick = { onExitClick() }) {
+                Text(text = "Volver atras")
+            }
+        }
+    }
 
 }

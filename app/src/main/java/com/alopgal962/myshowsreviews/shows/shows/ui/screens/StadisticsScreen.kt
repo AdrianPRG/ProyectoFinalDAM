@@ -18,6 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -25,6 +27,7 @@ import coil.request.ImageRequest
 import com.alopgal962.myshowsreviews.R
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.BottomBar
+import com.alopgal962.myshowsreviews.shows.shows.ui.components.ReturnProfile
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.Topbar
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericVM
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
@@ -51,9 +54,21 @@ fun StatisticsScreen(RegisterLoginVM:RegisterLoginVM, GenericVM:GenericVM, navCo
                     RoundedCornerShape(45.dp)
                 )
                 .background(color = Color(35, 54, 71)), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Cuenta de ${RegisterLoginVM.nombreRegister}", color = Color.White, modifier = Modifier.padding(top = 15.dp))
-                Text(text = "cuenta --> ${RegisterLoginVM.imagenRegister}")
+                Text(text = "Cuenta de ${RegisterLoginVM.nombreRegister}", color = Color.White, modifier = Modifier.padding(top = 15.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
+                Image(painter = ReturnProfile(imageString = RegisterLoginVM.imagenRegister), contentDescription = "imagen", modifier = Modifier
+                    .padding(top = 20.dp)
+                    .size(100.dp, 100.dp)
+                    .clip(
+                        RoundedCornerShape(40)
+                    ))
+                Text(text = "Series Calificadas: ${RegisterLoginVM.listaSeries?.count()}",modifier = Modifier.padding(top = 15.dp),fontFamily = FontFamily.Serif)
+                Text(text = "Numero de amigos: ${RegisterLoginVM.listaAmigos?.count()}",modifier = Modifier.padding(top = 15.dp),fontFamily = FontFamily.Serif )
+            }
+            Column(modifier = Modifier.padding(top = 30.dp).size(70.dp,70.dp).clip(
+                RoundedCornerShape(20))) {
+
             }
         }
     }
 }
+

@@ -72,6 +72,7 @@ fun iniciarsesion(navegacion: () -> Unit) {
                     if (it.isSuccessful) {
                         VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().addOnSuccessListener {
                             nombreRegister = it.get("nombre").toString()
+                            imagenRegister = it.get("imagen").toString()
                             navegacion()
                         }.addOnFailureListener {
                             Log.d("ERROR-DatosUsuario","Error al obtener los datos de usuario")

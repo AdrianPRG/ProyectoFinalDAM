@@ -12,8 +12,6 @@ class Constantes {
 
         const val mejorvaloradas = "tv/top_rated"
 
-        const val page="&page="
-
         const val auth = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTlmYmI3MmRlZTMyYmUwMDcwN2IxZDc0ZmVlMGJlNSIsInN1YiI6IjY1ZmIzZTI0MDQ3MzNmMDE2NGU2NDcyNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._Ma7X3wYOPDqiT5R_0k8CD4cKNR1NBsTNfojJiDywGs"
 
     }

@@ -84,7 +84,6 @@ fun LoginScreen(registerLoginVM: RegisterLoginVM,genericVM: GenericVM ,navContro
             Button(
                 onClick = { registerLoginVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) }
                     genericVM.obtenerPeliculas()
-
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                 modifier = Modifier

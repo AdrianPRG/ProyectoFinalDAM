@@ -18,6 +18,17 @@ class ShowRepository {
         else {
             ShowsState()
         }
+
+    }
+
+    suspend fun GetInfoShow(nombre:String):ShowState{
+        val response = service.getPelicula(nombre)
+        return if (response.isSuccessful) {
+            response.body()!!.toShowState()
+        }
+        else{
+            ShowState()
+        }
     }
 
 
@@ -32,7 +43,9 @@ class ShowRepository {
             descripcion = this.descripcion,
             imagen = this.imagen,
             puntuacion = this.puntuacion,
-            votos = this.votos
+            votos = this.votos,
+            mipuntuacion = 0,
+            miresena = ""
         )
     }
 
