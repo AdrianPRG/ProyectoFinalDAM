@@ -2,30 +2,26 @@ package com.alopgal962.myshowsreviews.shows.shows.viewmodels
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alopgal962.myshowsreviews.shows.shows.data.model.User
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.getField
-import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.launch
 
 class RegisterLoginVM : ViewModel() {
 
-    var user = User()
+    //Campos Inserccion y usuario
+    var imagenRegister by mutableStateOf("")
+    var nombreRegister by mutableStateOf("")
+    var emaiLRegisterLogin by mutableStateOf("")
+    var passwordRegisterLogin by mutableStateOf("")
 
-    //Campos usuario
-    var imagen by mutableStateOf("")
-    var nombre by mutableStateOf("")
-    var email by mutableStateOf("")
-    var password by mutableStateOf("")
+    //Campos de usuario
     var listaAmigos:MutableList<Int>? by mutableStateOf(mutableListOf())
     var listaPeticiones:MutableList<Int>? by mutableStateOf(mutableListOf())
     var listaSeries:MutableList<ShowState>? by mutableStateOf(mutableListOf())
@@ -40,22 +36,23 @@ class RegisterLoginVM : ViewModel() {
     fun registrarme(navegacion: () -> Unit) {
         viewModelScope.launch {
             try {
-                if (imagen != "" && nombre != "" && email != "" && password.length >= 6 && comprobacionNombre() == true) {
-                    VMFireAuth.createUserWithEmailAndPassword(email, password)
+                if (imagenRegister != "" && nombreRegister != "" && emaiLRegisterLogin != "" && passwordRegisterLogin.length >= 6 && comprobacionNombre() == true) {
+                    VMFireAuth.createUserWithEmailAndPassword(emaiLRegisterLogin, passwordRegisterLogin)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                VMFireDB.collection("Usuarios").document(email).set (
+                                VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).set (
                                     hashMapOf(
-                                        "imagen" to imagen,
-                                        "nombre" to nombre,
-                                        "email" to email,
-                                        "contraseña" to password,
+                                        "imagen" to imagenRegister,
+                                        "nombre" to nombreRegister,
+                                        "email" to emaiLRegisterLogin,
+                                        "contraseña" to passwordRegisterLogin,
                                         "listaAmigos" to listaAmigos,
                                         "listaPeti" to listaPeticiones,
                                         "listaSeries" to listaSeries
                                     )
                                 ).addOnCompleteListener{
                                     navegacion()
+                                    borrarCampos()
                                 }
                             }
                         }
@@ -70,11 +67,11 @@ class RegisterLoginVM : ViewModel() {
 fun iniciarsesion(navegacion: () -> Unit) {
     viewModelScope.launch {
         try {
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                VMFireAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+            if (emaiLRegisterLogin.isNotEmpty() && passwordRegisterLogin.isNotEmpty()) {
+                VMFireAuth.signInWithEmailAndPassword(emaiLRegisterLogin, passwordRegisterLogin).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener {
-                            nombre = it.get("nombre").toString()
+                        VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().addOnSuccessListener {
+                            nombreRegister = it.get("nombre").toString()
                             navegacion()
                         }.addOnFailureListener {
                             Log.d("ERROR-DatosUsuario","Error al obtener los datos de usuario")
@@ -96,10 +93,10 @@ fun iniciarsesion(navegacion: () -> Unit) {
 fun comprobacionNombre(): Boolean {
     var disponible = true
         try {
-            VMFireDB.collection("Usuarios").whereEqualTo("nombre", nombre).get()
+            VMFireDB.collection("Usuarios").whereEqualTo("nombre", nombreRegister).get()
                 .addOnSuccessListener { datos ->
                     for (doc in datos) {
-                        if (doc.getString("nombre") == nombre) {
+                        if (doc.getString("nombre") == nombreRegister) {
                             disponible = false
                         }
                     }
@@ -113,10 +110,10 @@ fun comprobacionNombre(): Boolean {
 }
 
 fun borrarCampos() {
-    imagen = ""
-    nombre = ""
-    email = ""
-    password = ""
+    imagenRegister = ""
+    nombreRegister = ""
+    emaiLRegisterLogin = ""
+    passwordRegisterLogin = ""
 }
 
 }

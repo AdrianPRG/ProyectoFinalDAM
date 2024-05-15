@@ -10,11 +10,12 @@ import com.alopgal962.myshowsreviews.shows.shows.data.util.Constantes.Companion.
 import com.alopgal962.myshowsreviews.shows.shows.data.util.Constantes.Companion.page
 import retrofit2.Response
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface GetApiService {
 
     @GET(peliculas + key)
-    suspend fun getPeliculas(): Response<ShowsModel>
+    suspend fun getPeliculas(@Query("page")pagenum:Int): Response<ShowsModel>
 
     @GET(mejorvaloradas + key)
     suspend fun getMejoresPelis(): Response<List<ShowModel>>

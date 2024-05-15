@@ -1,7 +1,6 @@
-package com.alopgal962.myshowsreviews.shows.shows.ui
+package com.alopgal962.myshowsreviews.shows.shows.ui.screens
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,12 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.BottomBar
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.MostrarShow
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.Topbar
@@ -46,7 +43,7 @@ import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
 @Composable
 fun MainScreen(RegisterloginVM: RegisterLoginVM,GenericVM:GenericVM ,navController: NavController){
     val lista by GenericVM.listashow.collectAsState()
-    Scaffold(topBar = { Topbar() }, bottomBar = { BottomBar({ GenericVM.obtenerPeliculas() },{},{},{}) }) {
+    Scaffold(topBar = { Topbar() }, bottomBar = { BottomBar({ GenericVM.obtenerPeliculas() },{},{},{navController.navigate(Routes.stadisticsRoute.route)}) }) {
         Column(
             Modifier
                 .padding(top = 110.dp, bottom = 100.dp)
@@ -57,7 +54,6 @@ fun MainScreen(RegisterloginVM: RegisterLoginVM,GenericVM:GenericVM ,navControll
                 .fillMaxWidth()
                 .height(40.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                 Text(text = "\uD83D\uDD0E  Descubir Peliculas",color = Color.Black, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, fontSize = 16.sp)
-                Text(text = RegisterloginVM.nombre, color = Color.Black)
                 IconButton(onClick = {
                     GenericVM.refresh()
                     GenericVM.obtenerPeliculas()

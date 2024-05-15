@@ -1,4 +1,4 @@
-package com.alopgal962.myshowsreviews.shows.shows.ui
+package com.alopgal962.myshowsreviews.shows.shows.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -83,7 +83,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                     .padding(end = 15.dp)
                     .size(90.dp)
                     .clip(RoundedCornerShape(40))
-                    .clickable { registerLoginVM.imagen = "perfil1" }
+                    .clickable { registerLoginVM.imagenRegister = "perfil1" }
             )
             Image(
                 painter = painterResource(id = R.drawable.perfil2),
@@ -92,7 +92,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                     .padding(end = 15.dp)
                     .size(90.dp)
                     .clip(RoundedCornerShape(40))
-                    .clickable { registerLoginVM.imagen = "perfil2" }
+                    .clickable { registerLoginVM.imagenRegister = "perfil2" }
             )
             Image(
                 painter = painterResource(id = R.drawable.perfil3),
@@ -100,7 +100,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                 modifier = Modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(40))
-                    .clickable { registerLoginVM.imagen = "perfil3" }
+                    .clickable { registerLoginVM.imagenRegister = "perfil3" }
             )
         }
         //Columna que contiene las rows de cada textField
@@ -121,8 +121,8 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                         .padding(end = 10.dp)
                 )
                 TextField(
-                    value = registerLoginVM.nombre,
-                    onValueChange = { registerLoginVM.nombre = it },
+                    value = registerLoginVM.nombreRegister,
+                    onValueChange = { registerLoginVM.nombreRegister = it },
                     label = { Text(text = "Nombre de usuario", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -154,8 +154,8 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                         .padding(end = 10.dp)
                 )
                 TextField(
-                    value = registerLoginVM.email,
-                    onValueChange = { registerLoginVM.email = it },
+                    value = registerLoginVM.emaiLRegisterLogin,
+                    onValueChange = { registerLoginVM.emaiLRegisterLogin = it },
                     label = { Text(text = "Correo electronico", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -187,8 +187,8 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                         .padding(end = 10.dp)
                 )
                 TextField(
-                    value = registerLoginVM.password,
-                    onValueChange = { registerLoginVM.password = it },
+                    value = registerLoginVM.passwordRegisterLogin,
+                    onValueChange = { registerLoginVM.passwordRegisterLogin = it },
                     label = { Text(text = "Contraseña", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -214,7 +214,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
 
             ) {
                 Button(
-                    onClick = { registerLoginVM.registrarme { navController.navigate(Routes.mainRoute.route) } },
+                    onClick = { registerLoginVM.registrarme { navController.navigate(Routes.loginRoute.route) } },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                     modifier = Modifier
                         .padding(end = 40.dp)

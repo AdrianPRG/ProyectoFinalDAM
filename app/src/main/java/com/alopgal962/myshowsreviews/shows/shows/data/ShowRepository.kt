@@ -10,8 +10,8 @@ import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowsState
 class ShowRepository {
 
     private val service = Retrofit.retrofit.create(GetApiService::class.java)
-     suspend fun GetShows() :ShowsState {
-        val response = service.getPeliculas()
+     suspend fun GetShows(num:Int) :ShowsState {
+        val response = service.getPeliculas(num)
         return if (response.isSuccessful) {
             response.body()!!.toShowsState()
         }

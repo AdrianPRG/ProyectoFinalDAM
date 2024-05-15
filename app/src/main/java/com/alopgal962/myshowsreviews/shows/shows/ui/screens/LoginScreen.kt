@@ -1,4 +1,4 @@
-package com.alopgal962.myshowsreviews.shows.shows.ui
+package com.alopgal962.myshowsreviews.shows.shows.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -70,14 +70,14 @@ fun LoginScreen(registerLoginVM: RegisterLoginVM,genericVM: GenericVM ,navContro
                 contentDescription = "Imagen Sign in"
             )
             TextField(
-                value = registerLoginVM.email,
-                onValueChange = {registerLoginVM.email=it},
+                value = registerLoginVM.emaiLRegisterLogin,
+                onValueChange = {registerLoginVM.emaiLRegisterLogin=it},
                 label = { Text(text = "Introduce tu email") },
                 modifier = Modifier.padding(top = 35.dp)
             )
             TextField(
-                value = registerLoginVM.password,
-                onValueChange = {registerLoginVM.password=it},
+                value = registerLoginVM.passwordRegisterLogin,
+                onValueChange = {registerLoginVM.passwordRegisterLogin=it},
                 label = { Text(text = "Introduce tu password") },
                 modifier = Modifier.padding(top = 35.dp)
             )
@@ -95,6 +95,7 @@ fun LoginScreen(registerLoginVM: RegisterLoginVM,genericVM: GenericVM ,navContro
             }
             Text(text = "⚫ No tengo cuenta", color = Color.White, modifier = Modifier.padding(end = 100.dp, top = 40.dp).clickable {
                 navController.navigate(Routes.registerRoute.route)
+                registerLoginVM.borrarCampos()
             })
         }
     }

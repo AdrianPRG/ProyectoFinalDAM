@@ -13,11 +13,9 @@ import kotlinx.coroutines.launch
 
 class GenericVM:ViewModel() {
 
+    var numpage = 1
     //Instanciamos el repositorio, donde tenemos almacenadas las funciones de conversion y recuperacion de datos
     val ShowsRepository = ShowRepository()
-
-    //Pagina que ira aumentando su valor, esto hará que nos vaya mostrando mas resultados
-    var numpagina = mutableStateOf(1)
     //Declaramos la variable _listashow que sera privada
     //en esta haremos los cambios, es un estado y se va viendo constantemente
     private var _listaShow = MutableStateFlow<List<ShowState>>(emptyList())
@@ -31,7 +29,7 @@ class GenericVM:ViewModel() {
     fun obtenerPeliculas(){
         try {
             viewModelScope.launch {
-                _listaShow.value = ShowsRepository.GetShows().resultados
+                _listaShow.value = ShowsRepository.GetShows(numpage).resultados
             }
         }
         catch (e:Exception){
@@ -40,11 +38,11 @@ class GenericVM:ViewModel() {
         }
 
     fun refresh(){
-        if (numpagina.value<=499){
-            numpagina.value+=1
+        if (numpage<=499){
+            numpage+=1
         }
         else{
-            numpagina.value=1
+            numpage=1
         }
     }
 }
