@@ -73,7 +73,7 @@ class GenericVM:ViewModel() {
     fun obtenerPelicula(nombre:String){
         try {
             viewModelScope.launch {
-                _show.value = ShowsRepository.GetInfoShow(nombre).resultados.first()
+                _show.value = ShowsRepository.GetInfoShow(nombre).resultados.find { it.titulo == nombre }!!
             }
         }catch (e:Exception){
             Log.d("ErrorSpecificShow","Error al obtener el show especifico")
@@ -110,4 +110,6 @@ class GenericVM:ViewModel() {
             }
         }
     }
+
+
 }

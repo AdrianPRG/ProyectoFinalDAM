@@ -34,6 +34,7 @@ class ShowRepository {
 
     private fun ShowsModel.toShowsState():ShowsState{
         return ShowsState(
+
             resultados = this.resultados.map { it.toShowState() }
         )
     }

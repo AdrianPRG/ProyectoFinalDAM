@@ -14,11 +14,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
-import com.alopgal962.myshowsreviews.shows.shows.ui.screens.ShowInformation
+import com.alopgal962.myshowsreviews.shows.shows.ui.screens.StatisticsScreen
 import com.alopgal962.myshowsreviews.ui.theme.MyShowsReviewsTheme
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.LoginScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.MainScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.RegisterScreen
+import com.alopgal962.myshowsreviews.shows.shows.ui.screens.ShowInformation
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.StatisticsScreen
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericVM
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.stadisticsRoute.route) { StatisticsScreen( RegisterLoginVM = RegisterLoginVM, GenericVM = GenericVM, navController = navController ) }
                         composable("ShowInformation/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
                             val nombre = it.arguments?.getString("name") ?: "Godzilla Minus-One"
-                            ShowInformation(GenericVM = GenericVM,navController = navController, showname = nombre) }
+                            ShowInformation(GenericVM = GenericVM,navController = navController) }
                     }
                 }
             }

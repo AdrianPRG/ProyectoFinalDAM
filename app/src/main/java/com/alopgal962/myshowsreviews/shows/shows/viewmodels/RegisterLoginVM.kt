@@ -2,18 +2,25 @@ package com.alopgal962.myshowsreviews.shows.shows.viewmodels
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alopgal962.myshowsreviews.shows.shows.data.model.User
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class RegisterLoginVM : ViewModel() {
+
+    //Usuario
+
+    var user = MutableStateFlow(User())
 
     //Campos Inserccion y usuario
     var imagenRegister by mutableStateOf("")
@@ -71,8 +78,12 @@ fun iniciarsesion(navegacion: () -> Unit) {
                 VMFireAuth.signInWithEmailAndPassword(emaiLRegisterLogin, passwordRegisterLogin).addOnCompleteListener {
                     if (it.isSuccessful) {
                         VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().addOnSuccessListener {
-                            nombreRegister = it.get("nombre").toString()
-                            imagenRegister = it.get("imagen").toString()
+                            user.value.name = it.get("nombre").toString()
+                            user.value.image = it.get("imagen").toString()
+                            user.value.email = it.get("email").toString()
+                            user.value.listaAmigos = it.get("listaAmigos") as MutableList<Int>?
+                            user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>
+                            user.value.listaPeticiones = it.get("listaPeti") as MutableList<Int>
                             navegacion()
                         }.addOnFailureListener {
                             Log.d("ERROR-DatosUsuario","Error al obtener los datos de usuario")
@@ -89,6 +100,7 @@ fun iniciarsesion(navegacion: () -> Unit) {
         }
     }
 }
+
 
 @SuppressLint("SuspiciousIndentation")
 fun comprobacionNombre(): Boolean {
@@ -108,6 +120,11 @@ fun comprobacionNombre(): Boolean {
             Log.d("ErrorComprobacion", "Error al comprobar nombre de usuario")
         }
     return disponible
+}
+
+fun cerrarSesion(navegacion: () -> Unit){
+    navegacion()
+    user.value = User()
 }
 
 fun borrarCampos() {
