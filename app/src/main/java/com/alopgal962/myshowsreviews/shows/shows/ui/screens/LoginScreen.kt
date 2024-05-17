@@ -30,13 +30,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.alopgal962.myshowsreviews.R
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericVM
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericAndApiVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(registerLoginVM: RegisterLoginVM,genericVM: GenericVM ,navController: NavController) {
+fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController: NavController) {
     Column(
         Modifier
             .fillMaxSize()
@@ -70,20 +70,20 @@ fun LoginScreen(registerLoginVM: RegisterLoginVM,genericVM: GenericVM ,navContro
                 contentDescription = "Imagen Sign in"
             )
             TextField(
-                value = registerLoginVM.emaiLRegisterLogin,
-                onValueChange = {registerLoginVM.emaiLRegisterLogin=it},
+                value = userVM.emaiLRegisterLogin,
+                onValueChange = {userVM.emaiLRegisterLogin=it},
                 label = { Text(text = "Introduce tu email") },
                 modifier = Modifier.padding(top = 35.dp)
             )
             TextField(
-                value = registerLoginVM.passwordRegisterLogin,
-                onValueChange = {registerLoginVM.passwordRegisterLogin=it},
+                value = userVM.passwordRegisterLogin,
+                onValueChange = {userVM.passwordRegisterLogin=it},
                 label = { Text(text = "Introduce tu password") },
                 modifier = Modifier.padding(top = 35.dp)
             )
             Button(
-                onClick = { registerLoginVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) }
-                    genericVM.obtenerPeliculas()
+                onClick = { userVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) }
+                    genericAndApiVM.obtenerPeliculas()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                 modifier = Modifier
@@ -94,7 +94,7 @@ fun LoginScreen(registerLoginVM: RegisterLoginVM,genericVM: GenericVM ,navContro
             }
             Text(text = "⚫ No tengo cuenta", color = Color.White, modifier = Modifier.padding(end = 100.dp, top = 40.dp).clickable {
                 navController.navigate(Routes.registerRoute.route)
-                registerLoginVM.borrarCampos()
+                userVM.borrarCampos()
             })
         }
     }

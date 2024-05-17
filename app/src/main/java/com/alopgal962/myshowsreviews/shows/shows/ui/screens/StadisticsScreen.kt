@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Face
@@ -28,28 +27,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.alopgal962.myshowsreviews.R
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.BottomBar
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.ReturnProfile
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.Topbar
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericVM
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericAndApiVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StatisticsScreen(RegisterLoginVM:RegisterLoginVM, GenericVM:GenericVM, navController: NavController) {
-    val user by RegisterLoginVM.user.collectAsState()
+fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navController: NavController) {
+    val user by UserVM.user.collectAsState()
     Scaffold(topBar = { Topbar() }, bottomBar = {
         BottomBar(
             onCasaClick = { navController.navigate(Routes.mainRoute.route) },
@@ -107,7 +101,7 @@ fun StatisticsScreen(RegisterLoginVM:RegisterLoginVM, GenericVM:GenericVM, navCo
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Icon LogOut", tint = Color.Yellow,modifier = Modifier
                         .padding(top = 20.dp)
                         .size(30.dp, 30.dp)
-                        .clickable { RegisterLoginVM.cerrarSesion { navController.navigate(Routes.loginRoute.route) } })
+                        .clickable { UserVM.cerrarSesion { navController.navigate(Routes.loginRoute.route) } })
                 }
 
             }

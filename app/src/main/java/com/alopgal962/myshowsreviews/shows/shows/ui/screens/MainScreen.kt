@@ -37,24 +37,24 @@ import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.BottomBar
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.MostrarShow
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.Topbar
-import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowsState
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericVM
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericAndApiVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    RegisterloginVM: RegisterLoginVM,
-    GenericVM: GenericVM,
+    UserVM: UserVM,
+    GenericAndApiVM: GenericAndApiVM,
     navController: NavController
 ) {
-    val lista by GenericVM.listashow.collectAsState()
-    val bool by GenericVM.disabled.collectAsState()
+    val user by UserVM.user.collectAsState()
+    val lista by GenericAndApiVM.listashow.collectAsState()
+    val bool by GenericAndApiVM.disabled.collectAsState()
     Scaffold(topBar = { Topbar() }, bottomBar = {
-        BottomBar({ GenericVM.obtenerPeliculas() }, {}, {}, {
+        BottomBar({ GenericAndApiVM.obtenerPeliculas() }, {navController.navigate(Routes.myshowsroute.route)}, {}, {
             navController.navigate(Routes.stadisticsRoute.route)
-            Log.d("IMAGEN", RegisterloginVM.imagenRegister)
+            Log.d("IMAGEN", UserVM.imagenRegister)
         })
     }) {
         Column(
@@ -80,7 +80,7 @@ fun MainScreen(
                     fontSize = 16.sp
                 )
                 IconButton(onClick = {
-                    GenericVM.refresh()
+                    GenericAndApiVM.refresh()
                 }, enabled = bool) {
                     Icon(
                         imageVector = Icons.Filled.Refresh,
@@ -90,7 +90,7 @@ fun MainScreen(
                     )
                 }
             }
-            Text(text = "Pagina ${GenericVM.numpage}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold ,color = Color.Black)
+            Text(text = "Pagina ${GenericAndApiVM.numpage}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold ,color = Color.Black)
             if (lista.isNotEmpty()) {
                 Column(
                     modifier = Modifier
@@ -108,10 +108,12 @@ fun MainScreen(
                         items(lista) {
                             MostrarShow(Show = it,
                                 {
-                                    GenericVM.obtenerPelicula(it.titulo.toString())
+                                    GenericAndApiVM.obtenerPelicula(it.titulo.toString())
                                     navController.navigate("ShowInformation/${it.titulo}")
                                 },
-                                {})
+                                {
+                                   UserVM.añadidaALista(it)
+                                })
                         }
                     }
                 }

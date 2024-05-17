@@ -14,15 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.alopgal962.myshowsreviews.shows.shows.data.model.ShowModel
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.Topbar
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericAndApiVM
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowInformation(GenericVM:GenericVM,navController: NavController){
-    val show by GenericVM.show.collectAsState()
+fun ShowInformation(GenericAndApiVM:GenericAndApiVM, navController: NavController){
+    val show by GenericAndApiVM.show.collectAsState()
     Scaffold(topBar = { Topbar()}) {
         Column(modifier = Modifier
             .padding(top = 110.dp)

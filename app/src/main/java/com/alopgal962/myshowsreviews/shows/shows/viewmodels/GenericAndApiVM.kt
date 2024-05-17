@@ -2,7 +2,6 @@ package com.alopgal962.myshowsreviews.shows.shows.viewmodels
 
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alopgal962.myshowsreviews.shows.shows.data.ShowRepository
@@ -20,7 +19,7 @@ import kotlinx.coroutines.launch
  * @property _show Es el show en el que se almacenará el show cuando pulsemos para ver informacion sobre el.
  * @property show Es el show que se mostrará en la UI. Almacena el valor de _show
  */
-class GenericVM:ViewModel() {
+class GenericAndApiVM:ViewModel() {
 
 
     //Numero de pagina que ira incrementandose

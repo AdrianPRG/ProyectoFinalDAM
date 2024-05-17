@@ -18,11 +18,11 @@ import com.alopgal962.myshowsreviews.shows.shows.ui.screens.StatisticsScreen
 import com.alopgal962.myshowsreviews.ui.theme.MyShowsReviewsTheme
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.LoginScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.MainScreen
+import com.alopgal962.myshowsreviews.shows.shows.ui.screens.MyShowsScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.RegisterScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.ShowInformation
-import com.alopgal962.myshowsreviews.shows.shows.ui.screens.StatisticsScreen
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericVM
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericAndApiVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +32,22 @@ class MainActivity : ComponentActivity() {
             MyShowsReviewsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    val RegisterLoginVM: RegisterLoginVM by viewModels()
+                    val UserVM: UserVM by viewModels()
                     val navController = rememberNavController()
-                    val GenericVM: GenericVM by viewModels()
+                    val GenericAndApiVM: GenericAndApiVM by viewModels()
                     NavHost(navController = navController, startDestination = Routes.loginRoute.route ){
-                        composable(Routes.registerRoute.route){ RegisterScreen(registerLoginVM = RegisterLoginVM, navController) }
-                        composable(Routes.mainRoute.route) { MainScreen(RegisterloginVM = RegisterLoginVM, GenericVM = GenericVM ,navController = navController) }
-                        composable(Routes.loginRoute.route) { LoginScreen(registerLoginVM = RegisterLoginVM, genericVM = GenericVM(), navController = navController) }
-                        composable(Routes.stadisticsRoute.route) { StatisticsScreen( RegisterLoginVM = RegisterLoginVM, GenericVM = GenericVM, navController = navController ) }
+                        composable(Routes.registerRoute.route){ RegisterScreen(userVM = UserVM, navController) }
+                        composable(Routes.mainRoute.route) { MainScreen(UserVM = UserVM, GenericAndApiVM = GenericAndApiVM ,navController = navController) }
+                        composable(Routes.loginRoute.route) { LoginScreen(userVM = UserVM, genericAndApiVM = GenericAndApiVM(), navController = navController) }
+                        composable(Routes.stadisticsRoute.route) { StatisticsScreen( UserVM = UserVM, GenericAndApiVM = GenericAndApiVM, navController = navController ) }
+                        composable(Routes.myshowsroute.route) { MyShowsScreen(
+                            genericvm = GenericAndApiVM,
+                            UserVM = UserVM ,
+                            navController = navController
+                        ) }
                         composable("ShowInformation/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
                             val nombre = it.arguments?.getString("name") ?: "Godzilla Minus-One"
-                            ShowInformation(GenericVM = GenericVM,navController = navController) }
+                            ShowInformation(GenericAndApiVM = GenericAndApiVM,navController = navController) }
                     }
                 }
             }

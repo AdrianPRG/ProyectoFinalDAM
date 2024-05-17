@@ -32,11 +32,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.alopgal962.myshowsreviews.R
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
-import com.alopgal962.myshowsreviews.shows.shows.viewmodels.RegisterLoginVM
+import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavController) {
+fun RegisterScreen(userVM: UserVM, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,7 +83,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                     .padding(end = 15.dp)
                     .size(90.dp)
                     .clip(RoundedCornerShape(40))
-                    .clickable { registerLoginVM.imagenRegister = "perfil1" }
+                    .clickable { userVM.imagenRegister = "perfil1" }
             )
             Image(
                 painter = painterResource(id = R.drawable.perfil2),
@@ -92,7 +92,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                     .padding(end = 15.dp)
                     .size(90.dp)
                     .clip(RoundedCornerShape(40))
-                    .clickable { registerLoginVM.imagenRegister = "perfil2" }
+                    .clickable { userVM.imagenRegister = "perfil2" }
             )
             Image(
                 painter = painterResource(id = R.drawable.perfil3),
@@ -100,7 +100,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                 modifier = Modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(40))
-                    .clickable { registerLoginVM.imagenRegister = "perfil3" }
+                    .clickable { userVM.imagenRegister = "perfil3" }
             )
         }
         //Columna que contiene las rows de cada textField
@@ -121,8 +121,8 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                         .padding(end = 10.dp)
                 )
                 TextField(
-                    value = registerLoginVM.nombreRegister,
-                    onValueChange = { registerLoginVM.nombreRegister = it },
+                    value = userVM.nombreRegister,
+                    onValueChange = { userVM.nombreRegister = it },
                     label = { Text(text = "Nombre de usuario", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -154,8 +154,8 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                         .padding(end = 10.dp)
                 )
                 TextField(
-                    value = registerLoginVM.emaiLRegisterLogin,
-                    onValueChange = { registerLoginVM.emaiLRegisterLogin = it },
+                    value = userVM.emaiLRegisterLogin,
+                    onValueChange = { userVM.emaiLRegisterLogin = it },
                     label = { Text(text = "Correo electronico", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -187,8 +187,8 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                         .padding(end = 10.dp)
                 )
                 TextField(
-                    value = registerLoginVM.passwordRegisterLogin,
-                    onValueChange = { registerLoginVM.passwordRegisterLogin = it },
+                    value = userVM.passwordRegisterLogin,
+                    onValueChange = { userVM.passwordRegisterLogin = it },
                     label = { Text(text = "Contraseña", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -214,7 +214,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
 
             ) {
                 Button(
-                    onClick = { registerLoginVM.registrarme { navController.navigate(Routes.loginRoute.route) } },
+                    onClick = { userVM.registrarme { navController.navigate(Routes.loginRoute.route) } },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                     modifier = Modifier
                         .padding(end = 40.dp)
@@ -223,7 +223,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                     Text(text = "Registrarme")
                 }
                 Button(
-                    onClick = { registerLoginVM.borrarCampos() },
+                    onClick = { userVM.borrarCampos() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(210, 120, 120)),
                     modifier = Modifier.size(width = 130.dp, height = 50.dp)
                 ) {
@@ -236,7 +236,7 @@ fun RegisterScreen(registerLoginVM: RegisterLoginVM, navController: NavControlle
                 color = Color.Black,
                 modifier = Modifier.padding(end = 120.dp, bottom = 30.dp).clickable {
                     navController.navigate(Routes.loginRoute.route)
-                    registerLoginVM.borrarCampos()
+                    userVM.borrarCampos()
                 })
         }
     }
