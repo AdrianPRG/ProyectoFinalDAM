@@ -2,11 +2,9 @@ package com.alopgal962.myshowsreviews.shows.shows.viewmodels
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alopgal962.myshowsreviews.shows.shows.data.model.User
@@ -18,12 +16,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+@SuppressLint("MutableCollectionMutableState")
 class UserVM : ViewModel() {
 
     //Usuario
-
     private var _user = MutableStateFlow(User())
 
+    //Usuario a mostrar en la UI
     var user = _user.asStateFlow()
 
     //Campos Inserccion y usuario
@@ -43,6 +42,8 @@ class UserVM : ViewModel() {
     var VMFireAuth = Firebase.auth
     //Firebase base de datos
     var VMFireDB = Firebase.firestore
+
+    var amigo = mutableStateOf("")
 
     fun registrarme(navegacion: () -> Unit) {
         viewModelScope.launch {
@@ -85,9 +86,9 @@ fun iniciarsesion(navegacion: () -> Unit) {
                             _user.value.name = it.get("nombre").toString()
                             _user.value.image = it.get("imagen").toString()
                             _user.value.email = it.get("email").toString()
-                            _user.value.listaAmigos = it.get("listaAmigos") as MutableList<Int>?
+                            _user.value.listaAmigos = it.get("listaAmigos") as MutableList<User>?
                             _user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>
-                            _user.value.listaPeticiones = it.get("listaPeti") as MutableList<Int>
+                            _user.value.listaPeticiones = it.get("listaPeti") as MutableList<User>
                             navegacion()
                         }.addOnFailureListener {
                             Log.d("ERROR-DatosUsuario","Error al obtener los datos de usuario")
@@ -105,38 +106,68 @@ fun iniciarsesion(navegacion: () -> Unit) {
     }
 }
 
-
-@SuppressLint("SuspiciousIndentation")
-fun comprobacionNombre(): Boolean {
-    var disponible = true
-        try {
-            VMFireDB.collection("Usuarios").whereEqualTo("nombre", nombreRegister).get()
-                .addOnSuccessListener { datos ->
-                    for (doc in datos) {
-                        if (doc.getString("nombre") == nombreRegister) {
-                            disponible = false
-                        }
+    fun recuperarSeriesUsuario(){
+        viewModelScope.launch {
+            try {
+                if (emaiLRegisterLogin.isNotEmpty()){
+                    VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().addOnSuccessListener {
+                        _user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>?
+                    }.addOnFailureListener {
+                        Log.d("errorserie","Error al obtener las series de usuario")
                     }
-                }.addOnFailureListener {
-                Log.d("ErrorAccesoNombre", "Error al acceder a la base de datos")
+                }
+            }catch (e:Exception){
+                Log.d("ERROR-RECUPERAR","Error al recuperar las series")
             }
-        } catch (e: Exception) {
-            Log.d("ErrorComprobacion", "Error al comprobar nombre de usuario")
         }
-    return disponible
+    }
+
+
+fun meterSeriesUsuario(show:ShowState){
+    viewModelScope.launch {
+        try {
+            if (_user.value.listaSeries!!.filter{it -> it.titulo==show.titulo}.count()>=1){
+            }
+            else{
+                _user.value.listaSeries!!.add(show)
+                VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).update("listaSeries",_user.value.listaSeries)
+            }
+        }catch (e:Exception){
+            Log.d("ERROR-Serie-insert","Error al insertar la serie")
+        }
+    }
 }
 
-    fun añadidaALista(show:ShowState):Boolean{
-        var result = false
-        if (_user.value.listaSeries?.contains(show)==false){
-            _user.value.listaSeries?.add(show)
-            result=true
+fun mandarSolicitud(email:String){
+
+    viewModelScope.launch {
+        try {
+            var UserSoliSended = User()
+            VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener { it ->
+                UserSoliSended.listaPeticiones = it.get("listaPeti") as MutableList<User>
+            }
+            VMFireDB.collection("Usuarios").document(email).update("listaPeti",UserSoliSended.listaPeticiones)
+        }catch (e:Exception){
+
         }
-        else{
-            result=false
-        }
-        return result
     }
+}
+
+fun NumPeticiones():Int{
+    var cont = 0
+    viewModelScope.launch {
+        try {
+            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser!!.email.toString()).get().addOnSuccessListener {
+                var listapeti = it.get("listaPeti") as MutableList<User>
+                for (peticion in listapeti){
+                    cont+=1
+                }
+            }
+        }catch (e:Exception){
+        }
+    }
+    return cont
+}
 
 fun cerrarSesion(navegacion: () -> Unit){
     navegacion()
@@ -149,5 +180,26 @@ fun borrarCampos() {
     emaiLRegisterLogin = ""
     passwordRegisterLogin = ""
 }
+
+    @SuppressLint("SuspiciousIndentation")
+    fun comprobacionNombre(): Boolean {
+        var disponible = true
+        try {
+            VMFireDB.collection("Usuarios").whereEqualTo("nombre", nombreRegister).get()
+                .addOnSuccessListener { datos ->
+                    for (doc in datos) {
+                        if (doc.getString("nombre") == nombreRegister) {
+                            disponible = false
+                        }
+                    }
+                }.addOnFailureListener {
+                    Log.d("ErrorAccesoNombre", "Error al acceder a la base de datos")
+                }
+        } catch (e: Exception) {
+            Log.d("ErrorComprobacion", "Error al comprobar nombre de usuario")
+        }
+        return disponible
+    }
+
 
 }

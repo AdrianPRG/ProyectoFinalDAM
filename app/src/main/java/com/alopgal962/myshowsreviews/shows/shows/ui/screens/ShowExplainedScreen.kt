@@ -20,7 +20,7 @@ import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericAndApiVM
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowInformation(GenericAndApiVM:GenericAndApiVM, navController: NavController){
+fun ShowExplained(GenericAndApiVM:GenericAndApiVM, navController: NavController){
     val show by GenericAndApiVM.show.collectAsState()
     Scaffold(topBar = { Topbar()}) {
         Column(modifier = Modifier
