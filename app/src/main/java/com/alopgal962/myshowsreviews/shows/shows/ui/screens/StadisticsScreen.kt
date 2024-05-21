@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -58,7 +59,7 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
             .background(color = Color(232, 239, 236)), horizontalAlignment = Alignment.CenterHorizontally) {
             Column(modifier = Modifier
                 .padding(top = 30.dp)
-                .size(320.dp, 300.dp)
+                .size(320.dp, 360.dp)
                 .clip(
                     RoundedCornerShape(45.dp)
                 )
@@ -75,8 +76,12 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                     Text(text = "Series Calificadas: ${user.listaSeries?.count()}",fontFamily = FontFamily.Serif, color = Color.White)
                 }
                 Row(modifier = Modifier.padding(top = 20.dp).size(250.dp,45.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                    Icon(imageVector = Icons.Default.Face, contentDescription = "Imagen Series", tint = Color.White, modifier = Modifier.padding(end = 10.dp).size(30.dp,30.dp))
+                    Icon(imageVector = Icons.Default.Face, contentDescription = "Imagen Amigos", tint = Color.White, modifier = Modifier.padding(end = 10.dp).size(30.dp,30.dp))
                     Text(text = "Numero de amigos: ${user.listaAmigos?.count()}",fontFamily = FontFamily.Serif, color = Color.White)
+                }
+                Row(modifier = Modifier.padding(top = 20.dp).size(250.dp,45.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                    Icon(imageVector = Icons.Default.Star, contentDescription = "Imagen Media", tint = Color.White, modifier = Modifier.padding(end = 10.dp).size(30.dp,30.dp))
+                    Text(text = "Media de calificaciones: 0",fontFamily = FontFamily.Serif, color = Color.White, fontSize = 15.sp)
                 }
             }
             Row(
