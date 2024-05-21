@@ -84,6 +84,7 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
             Button(
                 onClick = { userVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) }
                     genericAndApiVM.obtenerPeliculas()
+                    userVM.recuperarSeriesUsuario()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                 modifier = Modifier

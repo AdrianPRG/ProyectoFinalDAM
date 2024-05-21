@@ -6,6 +6,7 @@ sealed class Routes(val route:String){
     object mainRoute: Routes("MainScreen")
     object stadisticsRoute:Routes("Statistics")
     object myshowsroute:Routes("showsScreen")
-    object friendsRoute:Routes("friendsScreen")
+    object addfriendsRoute:Routes("addfriendScreen")
+    object seeFriendsRoute:Routes("seeFriendsScreen")
     object showRoute:Routes("ShowInformation/{nombre}")
 }

@@ -52,7 +52,8 @@ fun MainScreen(
     val lista by GenericAndApiVM.listashow.collectAsState()
     val bool by GenericAndApiVM.disabled.collectAsState()
     Scaffold(topBar = { Topbar() }, bottomBar = {
-        BottomBar({ GenericAndApiVM.obtenerPeliculas() }, {navController.navigate(Routes.myshowsroute.route)}, {}, {
+        BottomBar({ GenericAndApiVM.obtenerPeliculas() }, {navController.navigate(Routes.myshowsroute.route)
+                                                          UserVM.recuperarSeriesUsuario()}, {navController.navigate(Routes.addfriendsRoute.route)}, {
             navController.navigate(Routes.stadisticsRoute.route)
             Log.d("IMAGEN", UserVM.imagenRegister)
         })
@@ -109,10 +110,12 @@ fun MainScreen(
                             MostrarShow(Show = it,
                                 {
                                     GenericAndApiVM.obtenerPelicula(it.titulo.toString())
-                                    navController.navigate("ShowInformation/${it.titulo}")
+                                    navController.navigate("ShowExplained/${it.titulo}")
+                                    Log.d("fiesta","error")
                                 },
                                 {
-                                   UserVM.añadidaALista(it)
+                                    UserVM.meterSeriesUsuario(it)
+                                    UserVM.recuperarSeriesUsuario()
                                 })
                         }
                     }
