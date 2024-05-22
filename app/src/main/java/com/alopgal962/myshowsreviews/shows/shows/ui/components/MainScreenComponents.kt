@@ -41,10 +41,10 @@ import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 @Composable
 fun MostrarShow(Show:ShowState, oninfoclick:() -> Unit, onanadirclick:() -> Unit){
     Column(modifier = Modifier
-        .size(220.dp, 320.dp)
+        .size(220.dp, 360.dp)
         .clip(RoundedCornerShape(20.dp))
         .background(color = Color(35, 54, 71)),horizontalAlignment = Alignment.CenterHorizontally){
-        Column(Modifier.size(190.dp,150.dp)) {
+        Column(Modifier.size(230.dp,150.dp)) {
             AsyncImage(model = "https://image.tmdb.org/t/p/w500${Show.imagen}", contentDescription = "${Show.titulo} / imagen",
                 Modifier
                     .fillMaxSize()

@@ -52,11 +52,13 @@ fun MainScreen(
     val lista by GenericAndApiVM.listashow.collectAsState()
     val bool by GenericAndApiVM.disabled.collectAsState()
     Scaffold(topBar = { Topbar() }, bottomBar = {
-        BottomBar({ GenericAndApiVM.obtenerPeliculas() }, {navController.navigate(Routes.myshowsroute.route)
-                                                          UserVM.recuperarSeriesUsuario()}, {navController.navigate(Routes.addfriendsRoute.route)}, {
-            navController.navigate(Routes.stadisticsRoute.route)
-            Log.d("IMAGEN", UserVM.imagenRegister)
-        })
+        BottomBar({ GenericAndApiVM.obtenerPeliculas() },
+            {navController.navigate(Routes.myshowsroute.route)
+            UserVM.recuperarSeriesUsuario()},
+            {navController.navigate(Routes.addfriendsRoute.route)
+
+            },
+            { navController.navigate(Routes.stadisticsRoute.route) })
     }) {
         Column(
             Modifier
@@ -97,11 +99,11 @@ fun MainScreen(
                     modifier = Modifier
                         .padding(top = 20.dp)
                         .fillMaxWidth()
-                        .height(320.dp)
+                        .height(360.dp)
                 ) {
                     LazyHorizontalGrid(
                         modifier = Modifier
-                            .height(320.dp)
+                            .height(360.dp)
                             .padding(start = 15.dp, end = 15.dp),
                         rows = GridCells.Fixed(1),
                         horizontalArrangement = Arrangement.spacedBy(20.dp)
