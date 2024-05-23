@@ -12,9 +12,11 @@ import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @SuppressLint("MutableCollectionMutableState")
 class UserVM : ViewModel() {
@@ -44,6 +46,8 @@ class UserVM : ViewModel() {
     var VMFireDB = Firebase.firestore
 
     var amigo = mutableStateOf("")
+
+    var usuario = User()
 
     fun registrarme(navegacion: () -> Unit) {
         viewModelScope.launch {
@@ -139,14 +143,11 @@ fun meterSeriesUsuario(show:ShowState){
 }
 
 fun mandarSolicitud(email:String){
-
     viewModelScope.launch {
         try {
-            var UserSoliSended = User()
-            VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener { it ->
-                UserSoliSended.listaPeticiones = it.get("listaPeti") as MutableList<User>
-            }
-            VMFireDB.collection("Usuarios").document(email).update("listaPeti",UserSoliSended.listaPeticiones)
+            val document = VMFireDB.collection("Usuarios").document(email).get().await()
+            var dato  = document.toObject<User>()
+            Log.d("DATOS",dato!!.email.toString())
         }catch (e:Exception){
 
         }

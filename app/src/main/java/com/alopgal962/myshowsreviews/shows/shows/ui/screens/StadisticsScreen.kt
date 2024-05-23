@@ -48,8 +48,8 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
         BottomBar(
             onCasaClick = { navController.navigate(Routes.mainRoute.route) },
 
-            onSeriesClick = { /*TODO*/ },
-            onAmigosClick = { /*TODO*/ },
+            onSeriesClick = { navController.navigate(Routes.myshowsroute.route) },
+            onAmigosClick = { navController.navigate(Routes.addfriendsRoute.route) },
             onConfigClic = { /*TODO*/ })
     }) {
         Column(modifier = Modifier
