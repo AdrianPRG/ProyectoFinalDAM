@@ -121,10 +121,8 @@ fun MainScreen(
                                 {
                                     GenericAndApiVM.obtenerPelicula(it.titulo.toString())
                                     navController.navigate("ShowExplained/${it.titulo}")
-                                    Log.d("fiesta","error")
                                 },
                                 {
-                                    UserVM.meterSeriesUsuario(it)
                                     UserVM.recuperarSeriesUsuario()
                                 })
                         }
@@ -132,7 +130,7 @@ fun MainScreen(
                 }
             }
             else{
-                CircularProgressIndicator(color = Color.Black)
+                CircularProgressIndicator(color = Color.Black, modifier = Modifier.padding(top = 60.dp))
                 Text(text = "Cargando...", color = Color.Black)
             }
         }

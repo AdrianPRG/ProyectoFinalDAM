@@ -71,20 +71,13 @@ class GenericAndApiVM:ViewModel() {
     fun obtenerPelicula(nombre: String) {
         try {
             viewModelScope.launch {
-                _show.value = ShowsRepository.GetInfoShow(nombre).resultados.find { it.titulo == nombre }!!
+                _show.value = _listaShow.value.find { it.titulo == nombre }!!
             }
         } catch (e: Exception) {
             Log.d("ErrorSpecificShow", "Error al obtener el show especifico")
         }
     }
 
-    /*
-        Reinicia el valor de el Show que se muestra en pantalla completa, para que cuando se pulse sobre otro show, se muestre en la pantalla
-    */
-
-    fun exitShow() {
-        _show.value = ShowState()
-    }
 
     /*
        La funcion refresh avanza o retrocede en las paginas

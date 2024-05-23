@@ -46,9 +46,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )  }
                         composable("ShowExplained/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
-                            val nombre = it.arguments?.getString("name") ?: "Godzilla Minus-One"
                             ShowExplained(GenericAndApiVM = GenericAndApiVM,navController = navController) }
-
                     }
                 }
             }
