@@ -61,10 +61,8 @@ fun AddFriendScreen(GenericVM:GenericAndApiVM, UserVM:UserVM, navController: Nav
     Scaffold (topBar = { Topbar()}, bottomBar = { BottomBar(
         onCasaClick = { navController.navigate(Routes.mainRoute.route)},
         onSeriesClick = { navController.navigate(Routes.myshowsroute.route) },
-        onAmigosClick = { },
-        onConfigClic = {
-            navController.navigate(Routes.stadisticsRoute.route)
-        })}) {
+        onAmigosClick = {UserVM.ObtenerSolicitudesAmistad()},
+        onConfigClic = { navController.navigate(Routes.stadisticsRoute.route) })}) {
         Column(modifier = Modifier
             .padding(top = 110.dp, bottom = 100.dp)
             .fillMaxSize()
@@ -95,9 +93,11 @@ fun AddFriendScreen(GenericVM:GenericAndApiVM, UserVM:UserVM, navController: Nav
                 .fillMaxWidth()
                 .height(400.dp)
                 .background(color = Color(227, 214, 146)), horizontalAlignment = Alignment.CenterHorizontally) {
-                LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 400.dp), modifier = Modifier.fillMaxWidth().height(400.dp)) {
-                    items(user.listaPeticiones!!){
-                        MostrarNotificacion(usuario = it)
+                if (user.listaPeticiones?.isNotEmpty() == true){
+                    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 400.dp), modifier = Modifier.fillMaxWidth().height(400.dp)) {
+                        items(user.listaPeticiones!!){
+                            MostrarNotificacion(usuario = it,{},{UserVM.eliminarSolicitud(it.email.toString())})
+                        }
                     }
                 }
             }

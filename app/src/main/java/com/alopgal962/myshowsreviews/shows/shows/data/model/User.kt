@@ -26,11 +26,11 @@ class User {
 
     var listaPeticiones:MutableList<User>?=null
 
-    //Ahora se guardará la imagen que el usuario elige
-
     var listaSeries:MutableList<ShowState>? = null
 
-    var image:String? = null;
+    //Aqui se guardará la imagen que el usuario elige
+
+    var image:String? = null
 
 
     fun showUserInfo(user:User):String{

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alopgal962.myshowsreviews.shows.shows.data.ShowRepository
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
+import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowsState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +31,7 @@ class GenericAndApiVM:ViewModel() {
 
     //Declaramos la variable _listashow que sera privada
     //en esta haremos los cambios, es un estado y se va viendo constantemente
-     var _listaShow = MutableStateFlow<List<ShowState>>(emptyList())
+    var _listaShow = MutableStateFlow<List<ShowState>>(emptyList())
 
     //La lista publica que mostraremos
     val listashow = _listaShow.asStateFlow()
@@ -46,36 +47,34 @@ class GenericAndApiVM:ViewModel() {
 
     //Inicializamos la funciond de obtener peliculas
     init {
-        obtenerPeliculas()
+        obtenerPeliculas(numpage)
     }
 
     /*
         Llama a la funcion GetShows de el repositorio, y almacena los resultados en la lista _listashow.
      */
 
-    fun obtenerPeliculas(){
+    fun obtenerPeliculas(numpagina:Int) {
         try {
             viewModelScope.launch {
-                _listaShow.value = ShowsRepository.GetShows(numpage).resultados
-
+                _listaShow.value = ShowsRepository.GetShows(numpagina).resultados
             }
+        } catch (e: Exception) {
+            Log.d("ErrorObtener", "Error al llamar funcion de obtener peliculas")
         }
-        catch (e:Exception){
-            Log.d("ErrorObtener","Error al llamar funcion de obtener peliculas")
-        }
-        }
+    }
 
     /**
      * @param nombre es el nombre que se le pasará a la funcion GetInfoShow, para que busque en la base de datos la pelicula que contenga ese nombre
      */
 
-    fun obtenerPelicula(nombre:String){
+    fun obtenerPelicula(nombre: String) {
         try {
             viewModelScope.launch {
                 _show.value = ShowsRepository.GetInfoShow(nombre).resultados.find { it.titulo == nombre }!!
             }
-        }catch (e:Exception){
-            Log.d("ErrorSpecificShow","Error al obtener el show especifico")
+        } catch (e: Exception) {
+            Log.d("ErrorSpecificShow", "Error al obtener el show especifico")
         }
     }
 
@@ -83,32 +82,35 @@ class GenericAndApiVM:ViewModel() {
         Reinicia el valor de el Show que se muestra en pantalla completa, para que cuando se pulse sobre otro show, se muestre en la pantalla
     */
 
-    fun exitShow(){
+    fun exitShow() {
         _show.value = ShowState()
     }
 
     /*
-       La funcion refresh incrementa la
+       La funcion refresh avanza o retrocede en las paginas
      */
-     fun refresh(){
+    fun refresh(go: Boolean) {
         viewModelScope.launch {
-            if (listashow.value.size!=20){
-
-            }
-            else{
-                if (numpage<=499){
+            if (go == true) {
+               if (numpage==499){
+                   numpage=1
+               }
+                else{
                     numpage+=1
-                    obtenerPeliculas()
-                    disabled.value = false
-                    delay(2000)
-                    disabled.value = true
+               }
+            }
+            else if (go == false) {
+                if (numpage == 1) {
+                    numpage = 499
                 }
                 else{
-                    numpage=1
+                    numpage-=1
                 }
             }
+            obtenerPeliculas(numpage)
+            disabled.value = false
+            delay(2000)
+            disabled.value = true
         }
     }
-
-
 }

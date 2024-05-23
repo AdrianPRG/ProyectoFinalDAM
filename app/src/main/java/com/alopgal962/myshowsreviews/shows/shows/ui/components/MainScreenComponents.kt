@@ -41,25 +41,25 @@ import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 @Composable
 fun MostrarShow(Show:ShowState, oninfoclick:() -> Unit, onanadirclick:() -> Unit){
     Column(modifier = Modifier
-        .size(220.dp, 360.dp)
+        .size(270.dp, 360.dp)
         .clip(RoundedCornerShape(20.dp))
         .background(color = Color(35, 54, 71)),horizontalAlignment = Alignment.CenterHorizontally){
-        Column(Modifier.size(230.dp,150.dp)) {
+        Column(Modifier.size(270.dp,190.dp)) {
             AsyncImage(model = "https://image.tmdb.org/t/p/w500${Show.imagen}", contentDescription = "${Show.titulo} / imagen",
                 Modifier
                     .fillMaxSize()
                     .scale(2.5f, 1f) )
         }
         Column(
-            Modifier.size(220.dp, 110.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = Show.titulo!!, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold ,fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 10.dp))
-            Text(text = "Puntuacion: " + Show.puntuacion?.substring(0,3) + " ⭐ ", Modifier.padding(top = 10.dp), fontSize = 14.sp ,color = Color.White,fontFamily = FontFamily.Serif)
-            Text(text = "Numero de votos: " + Show.votos, Modifier.padding(top = 10.dp) ,fontSize = 14.sp , color = Color.White,fontFamily = FontFamily.Serif)
+            Modifier.size(270.dp, 110.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = Show.titulo!!, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold ,fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 10.dp))
+            Text(text = "Puntuacion: " + Show.puntuacion?.substring(0,3) + " ⭐ ", Modifier.padding(top = 10.dp), fontSize = 13.sp ,color = Color.White,fontFamily = FontFamily.Serif)
+            Text(text = "Numero de votos: " + Show.votos, Modifier.padding(top = 10.dp) ,fontSize = 13.sp , color = Color.White,fontFamily = FontFamily.Serif)
         }
         Column(
             Modifier
                 .padding(bottom = 15.dp)
-                .size(220.dp, 60.dp)) {
+                .size(270.dp, 40.dp)) {
             Row(modifier = Modifier
                 .fillMaxSize(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically
             ) {

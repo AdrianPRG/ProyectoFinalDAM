@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,18 +73,21 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
             TextField(
                 value = userVM.emaiLRegisterLogin,
                 onValueChange = {userVM.emaiLRegisterLogin=it},
-                label = { Text(text = "Introduce tu email") },
-                modifier = Modifier.padding(top = 35.dp)
+                label = { Text(text = "Introduce tu email",color = Color(35, 54, 71)) },
+                modifier = Modifier.padding(top = 35.dp),
+                colors = TextFieldDefaults.textFieldColors(containerColor = Color(232, 239, 236), textColor = Color(35, 54, 71))
             )
             TextField(
                 value = userVM.passwordRegisterLogin,
                 onValueChange = {userVM.passwordRegisterLogin=it},
-                label = { Text(text = "Introduce tu password") },
-                modifier = Modifier.padding(top = 35.dp)
+                label = { Text(text = "Introduce tu password", color = Color(35, 54, 71)) },
+                modifier = Modifier.padding(top = 35.dp),
+                colors = TextFieldDefaults.textFieldColors(containerColor = Color(232, 239, 236), textColor = Color(35, 54, 71))
+
             )
             Button(
                 onClick = { userVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) }
-                    genericAndApiVM.obtenerPeliculas()
+                    genericAndApiVM.obtenerPeliculas(genericAndApiVM.numpage)
                     userVM.recuperarSeriesUsuario()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
@@ -93,10 +97,12 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
             ) {
                 Text(text = "Iniciar Sesion", fontSize = 16.sp)
             }
-            Text(text = "⚫ No tengo cuenta", color = Color.White, modifier = Modifier.padding(end = 100.dp, top = 40.dp).clickable {
-                navController.navigate(Routes.registerRoute.route)
-                userVM.borrarCampos()
-            })
+            Text(text = "⚫ No tengo cuenta", color = Color.White, modifier = Modifier
+                .padding(end = 100.dp, top = 40.dp)
+                .clickable {
+                    navController.navigate(Routes.registerRoute.route)
+                    userVM.borrarCampos()
+                })
         }
     }
 }

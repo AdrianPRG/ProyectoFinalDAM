@@ -15,6 +15,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -48,16 +51,15 @@ fun MainScreen(
     GenericAndApiVM: GenericAndApiVM,
     navController: NavController
 ) {
+
     val user by UserVM.user.collectAsState()
     val lista by GenericAndApiVM.listashow.collectAsState()
     val bool by GenericAndApiVM.disabled.collectAsState()
     Scaffold(topBar = { Topbar() }, bottomBar = {
-        BottomBar({ GenericAndApiVM.obtenerPeliculas() },
+        BottomBar({ GenericAndApiVM.obtenerPeliculas(numpagina = GenericAndApiVM.numpage) },
             {navController.navigate(Routes.myshowsroute.route)
             UserVM.recuperarSeriesUsuario()},
-            {navController.navigate(Routes.addfriendsRoute.route)
-
-            },
+            {navController.navigate(Routes.addfriendsRoute.route)},
             { navController.navigate(Routes.stadisticsRoute.route) })
     }) {
         Column(
@@ -75,19 +77,25 @@ fun MainScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
+                IconButton(onClick = { GenericAndApiVM.refresh(false) }, enabled = bool) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Atras",
+                        tint = Color.Black,
+                        modifier = Modifier.size(25.dp, 25.dp) )
+                }
                 Text(
                     text = "\uD83D\uDD0E  Descubir Peliculas",
                     color = Color.Black,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = FontFamily.Serif,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(start = 10.dp)
                 )
                 IconButton(onClick = {
-                    GenericAndApiVM.refresh()
+                    GenericAndApiVM.refresh(true)
                 }, enabled = bool) {
                     Icon(
-                        imageVector = Icons.Filled.Refresh,
-                        contentDescription = "Refrescar",
+                        imageVector = Icons.Filled.ArrowForward,
+                        contentDescription = "Siguiente",
                         tint = Color.Black,
                         modifier = Modifier.size(25.dp, 25.dp)
                     )

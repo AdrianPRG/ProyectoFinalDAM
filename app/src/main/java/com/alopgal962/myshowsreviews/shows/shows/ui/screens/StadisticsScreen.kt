@@ -48,7 +48,6 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
     Scaffold(topBar = { Topbar() }, bottomBar = {
         BottomBar(
             onCasaClick = { navController.navigate(Routes.mainRoute.route) },
-
             onSeriesClick = { /*TODO*/ },
             onAmigosClick = { navController.navigate(Routes.addfriendsRoute.route) },
             onConfigClic = { /*TODO*/ })
