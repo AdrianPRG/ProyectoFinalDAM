@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -47,8 +48,7 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
     Scaffold(topBar = { Topbar() }, bottomBar = {
         BottomBar(
             onCasaClick = { navController.navigate(Routes.mainRoute.route) },
-
-            onSeriesClick = { navController.navigate(Routes.myshowsroute.route) },
+            onSeriesClick = { /*TODO*/ },
             onAmigosClick = { navController.navigate(Routes.addfriendsRoute.route) },
             onConfigClic = { /*TODO*/ })
     }) {
@@ -58,12 +58,12 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
             .background(color = Color(232, 239, 236)), horizontalAlignment = Alignment.CenterHorizontally) {
             Column(modifier = Modifier
                 .padding(top = 30.dp)
-                .size(320.dp, 300.dp)
+                .size(320.dp, 360.dp)
                 .clip(
                     RoundedCornerShape(45.dp)
                 )
                 .background(color = Color(35, 54, 71)), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Cuenta de ${user.name}", color = Color.White, modifier = Modifier.padding(top = 15.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
+                Text(text = "Cuenta de ${user.nombre}", color = Color.White, modifier = Modifier.padding(top = 15.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
                 Image(painter = ReturnProfile(imageString = user.image.toString()), contentDescription = "imagen", modifier = Modifier
                     .padding(top = 20.dp)
                     .size(100.dp, 100.dp)
@@ -86,6 +86,14 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                         .size(30.dp, 30.dp))
                     Text(text = "Numero de amigos: ${user.listaAmigos?.count()}",fontFamily = FontFamily.Serif, color = Color.White)
                 }
+                Row(modifier = Modifier
+                    .padding(top = 20.dp)
+                    .size(250.dp, 45.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                    Icon(imageVector = Icons.Default.Star, contentDescription = "Imagen Calificaciones", tint = Color.White, modifier = Modifier
+                        .padding(end = 10.dp)
+                        .size(30.dp, 30.dp))
+                    Text(text = "Puntuacion Media: 0",fontFamily = FontFamily.Serif, color = Color.White)
+                }
             }
             Row(
                 Modifier
@@ -106,7 +114,6 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                     .clip(RoundedCornerShape(20))
                     .background(color = Color(35, 54, 71)), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                     Text(text = "Cerrar Sesion", fontSize = 13.sp, color = Color.White, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
-                    Text(text = UserVM.NumPeticiones().toString() + "peticiones")
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Icon LogOut", tint = Color.Yellow,modifier = Modifier
                         .padding(top = 20.dp)
                         .size(30.dp, 30.dp)

@@ -8,7 +8,7 @@ class User {
     //var id:String?=null
     //Nombre del usuario
 
-    var name:String?=null
+    var nombre:String?=null
 
     //Email
 
@@ -26,9 +26,14 @@ class User {
 
     var listaPeticiones:MutableList<User>?=null
 
-    //Ahora se guardará la imagen que el usuario elige
-
     var listaSeries:MutableList<ShowState>? = null
 
-    var image:String? = null;
+    //Aqui se guardará la imagen que el usuario elige
+
+    var image:String? = null
+
+
+    fun showUserInfo(user:User):String{
+        return "name -> ${user.nombre} email -> ${user.email} pass ${user.password} image ${user.image} listamigos ${user.listaAmigos} series ${user.listaSeries} listapeti ${user.listaPeticiones} "
+    }
 }

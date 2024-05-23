@@ -16,7 +16,6 @@ import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 @SuppressLint("MutableCollectionMutableState")
 class UserVM : ViewModel() {
@@ -34,9 +33,9 @@ class UserVM : ViewModel() {
     var passwordRegisterLogin by mutableStateOf("")
 
     //Campos de usuario
-    var listaAmigos:MutableList<Int>? by mutableStateOf(mutableListOf())
-    var listaPeticiones:MutableList<Int>? by mutableStateOf(mutableListOf())
-    var listaSeries:MutableList<ShowState>? by mutableStateOf(mutableListOf())
+    var listaAmigos:MutableList<User> = mutableListOf()
+    var listaPeticiones:MutableList<User> = mutableListOf()
+    var listaSeries:MutableList<ShowState> = mutableListOf()
 
     var disponible by mutableStateOf(true)
 
@@ -47,7 +46,7 @@ class UserVM : ViewModel() {
 
     var amigo = mutableStateOf("")
 
-    var usuario = User()
+    var petificiones by mutableStateOf(0)
 
     fun registrarme(navegacion: () -> Unit) {
         viewModelScope.launch {
@@ -58,12 +57,12 @@ class UserVM : ViewModel() {
                             if (it.isSuccessful) {
                                 VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).set (
                                     hashMapOf(
-                                        "imagen" to imagenRegister,
+                                        "image" to imagenRegister,
                                         "nombre" to nombreRegister,
                                         "email" to emaiLRegisterLogin,
-                                        "contraseña" to passwordRegisterLogin,
+                                        "password" to passwordRegisterLogin,
                                         "listaAmigos" to listaAmigos,
-                                        "listaPeti" to listaPeticiones,
+                                        "listaPeticiones" to listaPeticiones,
                                         "listaSeries" to listaSeries
                                     )
                                 ).addOnCompleteListener{
@@ -87,12 +86,14 @@ fun iniciarsesion(navegacion: () -> Unit) {
                 VMFireAuth.signInWithEmailAndPassword(emaiLRegisterLogin, passwordRegisterLogin).addOnCompleteListener {
                     if (it.isSuccessful) {
                         VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().addOnSuccessListener {
-                            _user.value.name = it.get("nombre").toString()
-                            _user.value.image = it.get("imagen").toString()
-                            _user.value.email = it.get("email").toString()
-                            _user.value.listaAmigos = it.get("listaAmigos") as MutableList<User>?
-                            _user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>
-                            _user.value.listaPeticiones = it.get("listaPeti") as MutableList<User>
+//                            _user.value.nombre = it.get("nombre").toString()
+//                            _user.value.image = it.get("image").toString()
+//                            _user.value.email = it.get("email").toString()
+//                            _user.value.password = it.get("password").toString()
+//                            _user.value.listaAmigos = it.get("listaAmigos") as MutableList<String>?
+//                            _user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>
+//                            _user.value.listaPeticiones = it.get("listaPeticiones") as MutableList<String>
+                            _user.value = it.toObject<User>()!!
                             navegacion()
                         }.addOnFailureListener {
                             Log.d("ERROR-DatosUsuario","Error al obtener los datos de usuario")
@@ -145,34 +146,91 @@ fun meterSeriesUsuario(show:ShowState){
 fun mandarSolicitud(email:String){
     viewModelScope.launch {
         try {
-            val document = VMFireDB.collection("Usuarios").document(email).get().await()
-            var dato  = document.toObject<User>()
-            Log.d("DATOS",dato!!.email.toString())
-        }catch (e:Exception){
-
-        }
-    }
-}
-
-fun NumPeticiones():Int{
-    var cont = 0
-    viewModelScope.launch {
-        try {
-            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser!!.email.toString()).get().addOnSuccessListener {
-                var listapeti = it.get("listaPeti") as MutableList<User>
-                for (peticion in listapeti){
-                    cont+=1
+            var usersended = User()
+            //Obtenemos nuestro usuario, con los datos restringidos, es decir, solo los necesarios
+            var UserRestricted=ObtainRestrictedData(VMFireAuth.currentUser?.email.toString())
+            //LLamamos a la base de datos, a la coleccion usuarios y al documento del email al que queremos añadir una peticion de nuestro usuario
+            VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener { it ->
+                //Comprobamos que el usuario obtenido no es nulo, tambien que no hemos mandado una solicitud a nuestro usuario, y por ultimo comprobamos si ya le habiamos mandado una solicitud de amistad
+                if (it.toObject<User>()==null || it.toObject<User>()?.email == VMFireAuth.currentUser?.email.toString() || it.toObject<User>()?.listaPeticiones!!.contains(UserRestricted)){
+                    Log.d("USUARIO-NULO","El usuario que se introdujo es nulo o no se puede enviar invitacion de amistad a uno mismo, o quizas ya le ha enviado una peticion de amistad anteriormente")
+                    amigo.value=""
+                }
+                else{
+                    usersended = it.toObject<User>()!!
+                    usersended.nombre = it.get("nombre").toString()
+                    VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).get().addOnSuccessListener {
+                        //Añadimos el usario recuperado a la lista
+                        usersended.listaPeticiones?.add(UserRestricted)
+                        //Actualizamos la lista en la base de datos
+                        VMFireDB.collection("Usuarios").document(email).update("listaPeticiones",usersended.listaPeticiones).addOnCompleteListener{
+                            //Restablecemos el valor a cadena vacia
+                            amigo.value=""
+                            //Log de confirmacion
+                            Log.d("PETICION-ENVIADA",usersended.listaPeticiones.toString())
+                        }
+                    }
                 }
             }
         }catch (e:Exception){
+            Log.d("ERROR-SOLICITUD","Error al mandar solicitud, excepcion captada")
         }
     }
-    return cont
+}
+fun eliminarSolicitud(email: String){
+    viewModelScope.launch {
+        try {
+            _user.value.listaPeticiones?.remove(ObtainRestrictedData(email))
+            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaPeticiones",_user.value.listaPeticiones)
+        }catch (e:Exception){
+            Log.d("ERROR-ELIMINAR-SOLICITUD","ERROR")
+        }
+    }
+}
+fun ObtenerSolicitudesAmistad(){
+    viewModelScope.launch {
+        try {
+            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser!!.email.toString()).get().addOnSuccessListener {
+                _user.value.listaPeticiones = it.get("listaPeticiones") as MutableList<User>
+            }.addOnFailureListener {
+                exception ->
+                Log.d("ERROR","ERROR AL OBTENER ")
+            }
+        }catch (e:Exception){
+            Log.d("ERROR-OBTAIN-DATA","ERROR al obtener las solicitudes")
+        }
+    }
+}
+
+fun ObtainRestrictedData(email:String):User{
+    var userPrivate = User()
+    viewModelScope.launch {
+        try {
+            VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener {
+                //Obtenemos solo los datos necesarios, la password no, ya que es algo privado del usuario, y la lista de peticiones igual
+                userPrivate.image = it.get("image").toString()
+                userPrivate.email = it.get("email").toString()
+                userPrivate.nombre = it.get("nombre").toString()
+                userPrivate.password="*********"
+                userPrivate.listaPeticiones = mutableListOf<User>()
+                userPrivate.listaAmigos = it.get("listaAmigos") as MutableList<User>
+                userPrivate.listaSeries = it.get("listaSeries") as MutableList<ShowState>
+        }
+    }
+        catch (e:Exception){
+            Log.d("ERROR-RESTRICTED-USER","Error al obtener los datos del usuario (restringido)")
+        }
+    }
+    return userPrivate
 }
 
 fun cerrarSesion(navegacion: () -> Unit){
-    navegacion()
-    _user.value = User()
+    try {
+        navegacion()
+        _user.value = User()
+    }catch (e:Exception){
+        Log.d("ERROR-CERRAR","Error al intentar cerrar sesion")
+    }
 }
 
 fun borrarCampos() {
@@ -182,7 +240,7 @@ fun borrarCampos() {
     passwordRegisterLogin = ""
 }
 
-    @SuppressLint("SuspiciousIndentation")
+
     fun comprobacionNombre(): Boolean {
         var disponible = true
         try {
@@ -201,6 +259,5 @@ fun borrarCampos() {
         }
         return disponible
     }
-
 
 }
