@@ -54,22 +54,23 @@ fun ShowExplained(GenericAndApiVM:GenericAndApiVM, navController: NavController)
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)
-                .background(color = Color(191, 198, 237)), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Titulo:", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif)
-                Text(text = show.titulo.toString(), modifier = Modifier.padding(top = 15.dp, end = 10.dp, start = 10.dp), fontWeight = FontWeight.Medium, fontFamily = FontFamily.SansSerif)
+                .background(color = Color(35, 54, 71)), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Titulo:", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, color = Color.White)
+                Text(text = show.titulo.toString(), modifier = Modifier.padding(top = 15.dp, end = 10.dp, start = 10.dp), fontWeight = FontWeight.Medium, fontFamily = FontFamily.SansSerif, color = Color.White)
             }
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)) {
+                .height(330.dp)) {
                 Column(modifier = Modifier.size(150.dp,300.dp)) {
                     AsyncImage(model = "https://image.tmdb.org/t/p/w500${show.imagen}", contentDescription = "Descripcion", modifier = Modifier
+                        .padding(top = 30.dp)
                         .fillMaxSize()
-                        .scale(scaleY = 1.33f, scaleX = 1.15f) )
+                        .scale(scaleY = 1.47f, scaleX = 1.15f) )
                 }
                 LazyColumn(modifier = Modifier
                     .padding(start = 10.dp)
-                    .size(250.dp, 300.dp)
-                    .background(color = Color(207, 191, 237))) {
+                    .size(250.dp, 330.dp)
+                    .background(color = Color(33, 93, 46))) {
                     item{
                         Text(text = "Descripcion:", modifier = Modifier.padding(top = 20.dp, start = 10.dp), fontSize = 17.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
                         Text(text = "${show.descripcion}", modifier = Modifier.padding(end = 20.dp, top = 20.dp, start = 10.dp, bottom = 15.dp), fontFamily = FontFamily.Serif)
@@ -79,11 +80,11 @@ fun ShowExplained(GenericAndApiVM:GenericAndApiVM, navController: NavController)
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .height(120.dp)
-                .background(color = Color(198, 237, 191)), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                .background(color = Color(87, 82, 57)), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center ) {
-                    Text(text = "Puntuacion: ${show.puntuacion?.substring(0,3)}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold)
+                    Text(text = "Puntuacion: ${show.puntuacion?.substring(0,3)}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.White)
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Star Rate", tint = Color.Yellow, modifier = Modifier
                         .padding(start = 10.dp)
                         .size(30.dp, 30.dp))
@@ -92,7 +93,7 @@ fun ShowExplained(GenericAndApiVM:GenericAndApiVM, navController: NavController)
                     .padding(top = 20.dp)
                     .fillMaxWidth()
                     .height(40.dp),verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                    Text(text = "Numero de votos: ${show.votos}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold)
+                    Text(text = "Numero de votos: ${show.votos}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.White)
                     Icon(imageVector = Icons.Default.ThumbUp, contentDescription = "Vote Count", tint = Color.Blue, modifier = Modifier
                         .padding(start = 10.dp)
                         .size(25.dp, 25.dp))

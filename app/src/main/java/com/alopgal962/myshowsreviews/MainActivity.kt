@@ -19,6 +19,7 @@ import com.alopgal962.myshowsreviews.shows.shows.ui.screens.StatisticsScreen
 import com.alopgal962.myshowsreviews.ui.theme.MyShowsReviewsTheme
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.LoginScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.MainScreen
+import com.alopgal962.myshowsreviews.shows.shows.ui.screens.MyShowsScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.RegisterScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.ShowExplained
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericAndApiVM
@@ -47,6 +48,11 @@ class MainActivity : ComponentActivity() {
                         )  }
                         composable("ShowExplained/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
                             ShowExplained(GenericAndApiVM = GenericAndApiVM,navController = navController) }
+                        composable(Routes.myshowsroute.route){ MyShowsScreen(
+                            uservm = UserVM,
+                            genericAndApiVM =GenericAndApiVM ,
+                            navController = navController
+                        ) }
                     }
                 }
             }

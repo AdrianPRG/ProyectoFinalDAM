@@ -51,14 +51,12 @@ fun MainScreen(
     GenericAndApiVM: GenericAndApiVM,
     navController: NavController
 ) {
-
     val user by UserVM.user.collectAsState()
     val lista by GenericAndApiVM.listashow.collectAsState()
     val bool by GenericAndApiVM.disabled.collectAsState()
     Scaffold(topBar = { Topbar() }, bottomBar = {
         BottomBar({ GenericAndApiVM.obtenerPeliculas(numpagina = GenericAndApiVM.numpage) },
-            {navController.navigate(Routes.myshowsroute.route)
-            UserVM.recuperarSeriesUsuario()},
+            {navController.navigate(Routes.myshowsroute.route) },
             {navController.navigate(Routes.addfriendsRoute.route)},
             { navController.navigate(Routes.stadisticsRoute.route) })
     }) {
@@ -123,7 +121,7 @@ fun MainScreen(
                                     navController.navigate("ShowExplained/${it.titulo}")
                                 },
                                 {
-                                    UserVM.recuperarSeriesUsuario()
+                                    UserVM.meterSeriesUsuario(it)
                                 })
                         }
                     }

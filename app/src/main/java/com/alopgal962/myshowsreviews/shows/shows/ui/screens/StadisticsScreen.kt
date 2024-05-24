@@ -48,7 +48,7 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
     Scaffold(topBar = { Topbar() }, bottomBar = {
         BottomBar(
             onCasaClick = { navController.navigate(Routes.mainRoute.route) },
-            onSeriesClick = { /*TODO*/ },
+            onSeriesClick = { navController.navigate(Routes.myshowsroute.route) },
             onAmigosClick = { navController.navigate(Routes.addfriendsRoute.route) },
             onConfigClic = { /*TODO*/ })
     }) {
@@ -106,7 +106,9 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                     Text(text = "Eliminar series", fontSize = 13.sp, color = Color.White, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Icon delete", tint = Color.Red, modifier = Modifier
                         .padding(top = 20.dp)
-                        .size(30.dp, 30.dp))
+                        .size(30.dp, 30.dp)
+                        .clickable { UserVM.deleteAllShows() }
+                    )
                 }
                 Column(modifier = Modifier
                     .padding(start = 20.dp)

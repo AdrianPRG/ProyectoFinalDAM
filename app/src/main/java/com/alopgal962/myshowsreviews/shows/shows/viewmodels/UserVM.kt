@@ -111,31 +111,16 @@ fun iniciarsesion(navegacion: () -> Unit) {
     }
 }
 
-    fun recuperarSeriesUsuario(){
-        viewModelScope.launch {
-            try {
-                if (emaiLRegisterLogin.isNotEmpty()){
-                    VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().addOnSuccessListener {
-                        _user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>?
-                    }.addOnFailureListener {
-                        Log.d("errorserie","Error al obtener las series de usuario")
-                    }
-                }
-            }catch (e:Exception){
-                Log.d("ERROR-RECUPERAR","Error al recuperar las series")
-            }
-        }
-    }
-
 
 fun meterSeriesUsuario(show:ShowState){
     viewModelScope.launch {
         try {
-            if (_user.value.listaSeries!!.filter{it -> it.titulo==show.titulo}.count()>=1){
+            if (_user.value.listaSeries!!.contains(show)==true){
+                Log.d("ERROR-INSERCCION-SHOW","El show a introducir ya existe")
             }
             else{
                 _user.value.listaSeries!!.add(show)
-                VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).update("listaSeries",_user.value.listaSeries)
+                VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaSeries",_user.value.listaSeries)
             }
         }catch (e:Exception){
             Log.d("ERROR-Serie-insert","Error al insertar la serie")
@@ -177,16 +162,23 @@ fun mandarSolicitud(email:String){
         }
     }
 }
-fun eliminarSolicitud(email: String){
-    viewModelScope.launch {
-        try {
-            _user.value.listaPeticiones?.remove(ObtainRestrictedData(email))
-            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaPeticiones",_user.value.listaPeticiones)
-        }catch (e:Exception){
-            Log.d("ERROR-ELIMINAR-SOLICITUD","ERROR")
+
+    fun recuperarSeriesUsuario(){
+        viewModelScope.launch {
+            try {
+                if (emaiLRegisterLogin.isNotEmpty()){
+                    VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().addOnSuccessListener {
+                        _user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>?
+                    }.addOnFailureListener {
+                        Log.d("errorserie","Error al obtener las series de usuario")
+                    }
+                }
+            }catch (e:Exception){
+                Log.d("ERROR-RECUPERAR","Error al recuperar las series")
+            }
         }
     }
-}
+
 fun ObtenerSolicitudesAmistad(){
     viewModelScope.launch {
         try {
@@ -224,6 +216,42 @@ fun ObtainRestrictedData(email:String):User{
     return userPrivate
 }
 
+fun deletePelicula(show:ShowState){
+    viewModelScope.launch {
+        try {
+            if (_user.value.listaSeries!!.contains(show)){
+                _user.value.listaSeries!!.remove(show)
+                VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaSeries",_user.value.listaSeries)
+            }
+            else{
+                Log.d("ERROR-Eliminacion","Error al eliminar show")
+            }
+        }catch (e:Exception){
+            Log.d("EXCEPCION-DELETE","Excepcion durante eliminacion de show")
+        }
+    }
+}
+    fun deleteAllShows(){
+        viewModelScope.launch {
+            try {
+                _user.value.listaSeries?.clear()
+                VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaPeticiones",_user.value.listaPeticiones)
+            }catch (e:Exception){
+                Log.d("ERROR-ELIMINAR-COMPLETO","Excepcion al intentar eliminar todas las seriess")
+            }
+        }
+    }
+fun eliminarSolicitud(email: String){
+    viewModelScope.launch {
+        try {
+            _user.value.listaPeticiones?.remove(ObtainRestrictedData(email))
+            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaPeticiones",_user.value.listaPeticiones)
+        }catch (e:Exception){
+            Log.d("ERROR-ELIMINAR-SOLICITUD","ERROR")
+        }
+    }
+}
+
 fun cerrarSesion(navegacion: () -> Unit){
     try {
         navegacion()
@@ -259,5 +287,4 @@ fun borrarCampos() {
         }
         return disponible
     }
-
 }
