@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -67,69 +68,79 @@ fun MainScreen(
                 .background(color = Color(232, 239, 236)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth()
-                    .height(40.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                IconButton(onClick = { GenericAndApiVM.refresh(false) }, enabled = bool) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Atras",
-                        tint = Color.Black,
-                        modifier = Modifier.size(25.dp, 25.dp) )
-                }
-                Text(
-                    text = "\uD83D\uDD0E  Descubir Peliculas",
-                    color = Color.Black,
-                    fontWeight = FontWeight.SemiBold,
-                    fontFamily = FontFamily.Serif,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(start = 10.dp)
-                )
-                IconButton(onClick = {
-                    GenericAndApiVM.refresh(true)
-                }, enabled = bool) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowForward,
-                        contentDescription = "Siguiente",
-                        tint = Color.Black,
-                        modifier = Modifier.size(25.dp, 25.dp)
-                    )
-                }
-            }
-            Text(text = "Pagina ${GenericAndApiVM.numpage}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold ,color = Color.Black)
-            if (lista.isNotEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .padding(top = 20.dp)
-                        .fillMaxWidth()
-                        .height(360.dp)
-                ) {
-                    LazyHorizontalGrid(
-                        modifier = Modifier
-                            .height(360.dp)
-                            .padding(start = 15.dp, end = 15.dp),
-                        rows = GridCells.Fixed(1),
-                        horizontalArrangement = Arrangement.spacedBy(20.dp)
-                    ) {
-                        items(lista) {
-                            MostrarShow(Show = it,
-                                {
-                                    GenericAndApiVM.obtenerPelicula(it.titulo.toString())
-                                    navController.navigate("ShowExplained/${it.titulo}")
-                                },
-                                {
-                                    UserVM.meterSeriesUsuario(it)
-                                })
-                        }
-                    }
+            if (UserVM.addingShow==true){
+                Text(text = "Reseña y puntuacion del usuario: Proximamente...", color = Color.Black, fontSize = 15.sp, modifier = Modifier.padding(top = 300.dp))
+                Text(text = "Se añadira la serie con valores de usuario nulos", color = Color.Black)
+                Button(onClick = { UserVM.changeOnAddingShowState() }) {
+                    Text(text = "Volver atras")
                 }
             }
             else{
-                CircularProgressIndicator(color = Color.Black, modifier = Modifier.padding(top = 60.dp))
-                Text(text = "Cargando...", color = Color.Black)
+                Row(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .fillMaxWidth()
+                        .height(40.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    IconButton(onClick = { GenericAndApiVM.refresh(false) }, enabled = bool) {
+                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Atras",
+                            tint = Color.Black,
+                            modifier = Modifier.size(25.dp, 25.dp) )
+                    }
+                    Text(
+                        text = "\uD83D\uDD0E  Descubir Peliculas",
+                        color = Color.Black,
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = FontFamily.Serif,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+                    IconButton(onClick = {
+                        GenericAndApiVM.refresh(true)
+                    }, enabled = bool) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowForward,
+                            contentDescription = "Siguiente",
+                            tint = Color.Black,
+                            modifier = Modifier.size(25.dp, 25.dp)
+                        )
+                    }
+                }
+                Text(text = "Pagina ${GenericAndApiVM.numpage}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold ,color = Color.Black)
+                if (lista.isNotEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 20.dp)
+                            .fillMaxWidth()
+                            .height(360.dp)
+                    ) {
+                        LazyHorizontalGrid(
+                            modifier = Modifier
+                                .height(360.dp)
+                                .padding(start = 15.dp, end = 15.dp),
+                            rows = GridCells.Fixed(1),
+                            horizontalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+                            items(lista) {
+                                MostrarShow(Show = it,
+                                    {
+                                        GenericAndApiVM.obtenerPelicula(it.titulo.toString())
+                                        navController.navigate("ShowExplained/${it.titulo}")
+                                    },
+                                    {
+                                        UserVM.changeOnAddingShowState()
+                                        UserVM.meterSeriesUsuario(it)
+                                    })
+                            }
+                        }
+                    }
+                }
+                else{
+                    CircularProgressIndicator(color = Color.Black, modifier = Modifier.padding(top = 60.dp))
+                    Text(text = "Cargando...", color = Color.Black)
+                }
             }
         }
     }

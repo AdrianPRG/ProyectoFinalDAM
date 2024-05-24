@@ -107,7 +107,9 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Icon delete", tint = Color.Red, modifier = Modifier
                         .padding(top = 20.dp)
                         .size(30.dp, 30.dp)
-                        .clickable { UserVM.deleteAllShows() }
+                        .clickable { UserVM.deleteAllShows()
+                            UserVM.recuperarSeriesUsuario()
+                        navController.navigate(Routes.stadisticsRoute.route)}
                     )
                 }
                 Column(modifier = Modifier

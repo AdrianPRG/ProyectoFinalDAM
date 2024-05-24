@@ -16,6 +16,7 @@ import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @SuppressLint("MutableCollectionMutableState")
 class UserVM : ViewModel() {
@@ -25,6 +26,8 @@ class UserVM : ViewModel() {
 
     //Usuario a mostrar en la UI
     var user = _user.asStateFlow()
+
+    var addingShow by mutableStateOf(false)
 
     //Campos Inserccion y usuario
     var imagenRegister by mutableStateOf("")
@@ -37,21 +40,19 @@ class UserVM : ViewModel() {
     var listaPeticiones:MutableList<User> = mutableListOf()
     var listaSeries:MutableList<ShowState> = mutableListOf()
 
-    var disponible by mutableStateOf(true)
 
     //Firebase autenticacion
     var VMFireAuth = Firebase.auth
     //Firebase base de datos
     var VMFireDB = Firebase.firestore
 
-    var amigo = mutableStateOf("")
-
-    var petificiones by mutableStateOf(0)
+    //Email del amigo a enviar solicitud
+    var emailFriend = mutableStateOf("")
 
     fun registrarme(navegacion: () -> Unit) {
         viewModelScope.launch {
             try {
-                if (imagenRegister != "" && nombreRegister != "" && emaiLRegisterLogin != "" && passwordRegisterLogin.length >= 6 && comprobacionNombre() == true) {
+                if (imagenRegister != "" && nombreRegister != "" && emaiLRegisterLogin != "" && passwordRegisterLogin.length >= 6) {
                     VMFireAuth.createUserWithEmailAndPassword(emaiLRegisterLogin, passwordRegisterLogin)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
@@ -139,7 +140,7 @@ fun mandarSolicitud(email:String){
                 //Comprobamos que el usuario obtenido no es nulo, tambien que no hemos mandado una solicitud a nuestro usuario, y por ultimo comprobamos si ya le habiamos mandado una solicitud de amistad
                 if (it.toObject<User>()==null || it.toObject<User>()?.email == VMFireAuth.currentUser?.email.toString() || it.toObject<User>()?.listaPeticiones!!.contains(UserRestricted)){
                     Log.d("USUARIO-NULO","El usuario que se introdujo es nulo o no se puede enviar invitacion de amistad a uno mismo, o quizas ya le ha enviado una peticion de amistad anteriormente")
-                    amigo.value=""
+                    emailFriend.value=""
                 }
                 else{
                     usersended = it.toObject<User>()!!
@@ -150,7 +151,7 @@ fun mandarSolicitud(email:String){
                         //Actualizamos la lista en la base de datos
                         VMFireDB.collection("Usuarios").document(email).update("listaPeticiones",usersended.listaPeticiones).addOnCompleteListener{
                             //Restablecemos el valor a cadena vacia
-                            amigo.value=""
+                            emailFriend.value=""
                             //Log de confirmacion
                             Log.d("PETICION-ENVIADA",usersended.listaPeticiones.toString())
                         }
@@ -163,21 +164,23 @@ fun mandarSolicitud(email:String){
     }
 }
 
-    fun recuperarSeriesUsuario(){
-        viewModelScope.launch {
-            try {
-                if (emaiLRegisterLogin.isNotEmpty()){
-                    VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().addOnSuccessListener {
-                        _user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>?
-                    }.addOnFailureListener {
-                        Log.d("errorserie","Error al obtener las series de usuario")
-                    }
+fun recuperarSeriesUsuario(){
+    viewModelScope.launch {
+        try {
+            var listatemporal= mutableListOf<ShowState>()
+            if (emaiLRegisterLogin.isNotEmpty()){
+                var documento = VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().await()
+                var lista = documento as MutableList<ShowState>
+                for (show in lista){
+                   listatemporal.add(show)
                 }
-            }catch (e:Exception){
-                Log.d("ERROR-RECUPERAR","Error al recuperar las series")
+                _user.value.listaSeries = listatemporal
             }
+        }catch (e:Exception){
+            Log.d("ERROR-RECUPERAR","Error al recuperar las series")
         }
     }
+}
 
 fun ObtenerSolicitudesAmistad(){
     viewModelScope.launch {
@@ -194,6 +197,9 @@ fun ObtenerSolicitudesAmistad(){
     }
 }
 
+    /*Saca de la base de datos un usuario, sin embargo, los campos peticiones y password seran nulos, ya que
+      El usuario que se guarda en la lista de peticiones de otro usuario no debe de poseer estos campos
+     */
 fun ObtainRestrictedData(email:String):User{
     var userPrivate = User()
     viewModelScope.launch {
@@ -216,6 +222,9 @@ fun ObtainRestrictedData(email:String):User{
     return userPrivate
 }
 
+    /*
+    Borrar de la lista la pelicula deseada, posteriormente guarda los cambios en la base de datos
+     */
 fun deletePelicula(show:ShowState){
     viewModelScope.launch {
         try {
@@ -231,16 +240,19 @@ fun deletePelicula(show:ShowState){
         }
     }
 }
-    fun deleteAllShows(){
-        viewModelScope.launch {
-            try {
-                _user.value.listaSeries?.clear()
-                VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaPeticiones",_user.value.listaPeticiones)
-            }catch (e:Exception){
-                Log.d("ERROR-ELIMINAR-COMPLETO","Excepcion al intentar eliminar todas las seriess")
-            }
+    /*
+    Elimina todos las series del usuario de la base de datos
+     */
+fun deleteAllShows(){
+    viewModelScope.launch {
+        try {
+            _user.value.listaSeries?.clear()
+            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaPeticiones",_user.value.listaPeticiones)
+        }catch (e:Exception){
+            Log.d("ERROR-ELIMINAR-COMPLETO","Excepcion al intentar eliminar todas las seriess")
         }
     }
+}
 fun eliminarSolicitud(email: String){
     viewModelScope.launch {
         try {
@@ -252,6 +264,7 @@ fun eliminarSolicitud(email: String){
     }
 }
 
+    //Cierra sesion, el usuario es nulo
 fun cerrarSesion(navegacion: () -> Unit){
     try {
         navegacion()
@@ -261,11 +274,16 @@ fun cerrarSesion(navegacion: () -> Unit){
     }
 }
 
+    //Borra campos
 fun borrarCampos() {
     imagenRegister = ""
     nombreRegister = ""
     emaiLRegisterLogin = ""
     passwordRegisterLogin = ""
+}
+
+fun changeOnAddingShowState(){
+    addingShow=!addingShow
 }
 
 

@@ -45,6 +45,7 @@ class ShowRepository {
             imagen = this.imagen,
             puntuacion = this.puntuacion,
             votos = this.votos,
+            fechasalida = this.fechasalida,
             mipuntuacion = 0,
             miresena = ""
         )

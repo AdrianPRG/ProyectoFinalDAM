@@ -80,7 +80,7 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
             TextField(
                 value = userVM.passwordRegisterLogin,
                 onValueChange = {userVM.passwordRegisterLogin=it},
-                label = { Text(text = "Introduce tu password", color = Color(35, 54, 71)) },
+                label = { Text(text = "Introduce tu contraseña", color = Color(35, 54, 71)) },
                 modifier = Modifier.padding(top = 35.dp),
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color(232, 239, 236), textColor = Color(35, 54, 71))
 

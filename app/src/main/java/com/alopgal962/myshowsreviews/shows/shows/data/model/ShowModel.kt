@@ -9,6 +9,8 @@ data class ShowModel(
     var descripcion:String="",
     @SerializedName("poster_path")
     var imagen:String="",
+    @SerializedName("release_date")
+    var fechasalida:String="",
     @SerializedName("vote_average")
     var puntuacion:String,
     @SerializedName("vote_count")

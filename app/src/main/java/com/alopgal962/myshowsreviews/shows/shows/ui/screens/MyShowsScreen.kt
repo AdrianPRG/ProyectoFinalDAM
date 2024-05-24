@@ -42,7 +42,7 @@ fun MyShowsScreen(uservm:UserVM,genericAndApiVM: GenericAndApiVM, navController:
     val user by uservm.user.collectAsState()
     Scaffold (topBar = { Topbar()}, bottomBar = { BottomBar(
         onCasaClick = { navController.navigate(Routes.mainRoute.route) },
-        onSeriesClick = { navController.navigate(Routes.addfriendsRoute.route) },
+        onSeriesClick = { uservm.recuperarSeriesUsuario()},
         onAmigosClick = { navController.navigate(Routes.addfriendsRoute.route)},
         onConfigClic = {navController.navigate(Routes.stadisticsRoute.route)}) }) {
         Column(modifier = Modifier
@@ -57,7 +57,7 @@ fun MyShowsScreen(uservm:UserVM,genericAndApiVM: GenericAndApiVM, navController:
                         verticalArrangement = Arrangement.spacedBy(35.dp),
                         columns = GridCells.Fixed(1)) {
                         items(user.listaSeries!!){
-                            MyShow(show = it,uservm)
+                            MyShow(show = it,uservm,navController)
                         }
                     }
                 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,40 +71,51 @@ fun ShowExplained(GenericAndApiVM:GenericAndApiVM, navController: NavController)
                 LazyColumn(modifier = Modifier
                     .padding(start = 10.dp)
                     .size(250.dp, 330.dp)
-                    .background(color = Color(33, 93, 46))) {
+                    .background(color = Color(35, 54, 71))) {
                     item{
-                        Text(text = "Descripcion:", modifier = Modifier.padding(top = 20.dp, start = 10.dp), fontSize = 17.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
-                        Text(text = "${show.descripcion}", modifier = Modifier.padding(end = 20.dp, top = 20.dp, start = 10.dp, bottom = 15.dp), fontFamily = FontFamily.Serif)
+                        Text(text = "Descripcion:", modifier = Modifier.padding(top = 20.dp, start = 10.dp), fontSize = 17.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, color = Color.White)
+                        Text(text = "${show.descripcion}", modifier = Modifier.padding(end = 20.dp, top = 20.dp, start = 10.dp, bottom = 15.dp), fontFamily = FontFamily.Serif, color = Color.White)
                     }
                 }
             }
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
-                .background(color = Color(87, 82, 57)), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                .height(190.dp)
+                .background(color = Color(35, 54, 71)), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
                 Row(modifier = Modifier
+                    .padding(top = 20.dp)
                     .fillMaxWidth()
                     .height(40.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center ) {
-                    Text(text = "Puntuacion: ${show.puntuacion?.substring(0,3)}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.White)
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Star Rate", tint = Color.Yellow, modifier = Modifier
-                        .padding(start = 10.dp)
+                        .padding(end = 10.dp)
                         .size(30.dp, 30.dp))
+                    Text(text = "Puntuacion: ${show.puntuacion?.substring(0,3)}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.White)
+
                 }
                 Row(modifier = Modifier
                     .padding(top = 20.dp)
                     .fillMaxWidth()
                     .height(40.dp),verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                    Text(text = "Numero de votos: ${show.votos}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.White)
                     Icon(imageVector = Icons.Default.ThumbUp, contentDescription = "Vote Count", tint = Color.Blue, modifier = Modifier
-                        .padding(start = 10.dp)
+                        .padding(end = 10.dp)
                         .size(25.dp, 25.dp))
+                    Text(text = "Numero de votos: ${show.votos}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.White)
+                }
+                Row(modifier = Modifier
+                    .padding(top = 20.dp, bottom = 10.dp)
+                    .fillMaxWidth()
+                    .height(40.dp),verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "Vote Count", tint = Color.White, modifier = Modifier
+                        .padding(end = 10.dp)
+                        .size(25.dp, 25.dp))
+                    Text(text = "Fecha de estreno: ${show.fechasalida}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.White)
                 }
             }
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
-                .background(color = Color.White), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Volver", tint = Color.Black, modifier = Modifier.size(40.dp,40.dp).clickable { navController.navigate(Routes.mainRoute.route) })
+                .background(color = Color(68, 68, 68)), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Volver", tint = Color.White, modifier = Modifier.size(40.dp,40.dp).clickable { navController.navigate(Routes.mainRoute.route) })
             }
         }
     }

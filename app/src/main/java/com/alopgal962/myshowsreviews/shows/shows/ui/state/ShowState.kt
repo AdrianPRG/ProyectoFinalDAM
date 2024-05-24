@@ -6,6 +6,7 @@ data class ShowState (
     var imagen:String? ="",
     var puntuacion:String? ="",
     var votos:String? = "",
+    var fechasalida:String? ="",
     var mipuntuacion:Int? = 0,
     var miresena:String? = ""
 )
