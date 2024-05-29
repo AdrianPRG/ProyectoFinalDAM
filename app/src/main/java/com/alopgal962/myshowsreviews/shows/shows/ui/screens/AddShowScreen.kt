@@ -45,7 +45,8 @@ fun AddShow(userVM: UserVM,navController: NavController){
                     Column(modifier = Modifier.size(350.dp,100.dp).clip(RoundedCornerShape(10.dp)).border(width = 5.dp, color = Color.Black), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                         Text(text = "Show a calificar", color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, fontSize = 20.sp )
                         Text(text = showInsertar.titulo.toString(),modifier = Modifier.padding(top = 10.dp),color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, fontSize = 13.5.sp )
-            }
+                        Text("hola")
+                    }
         }
     }
 }
