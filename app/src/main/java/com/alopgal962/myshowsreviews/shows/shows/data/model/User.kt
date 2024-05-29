@@ -20,11 +20,11 @@ class User {
 
     //Aqui se guardarán la lista de amigos, pero en vez de guardar user, se guarda el codigo por el que se identifican
 
-    var listaAmigos:MutableList<User>?=null
+    var listaAmigos:MutableList<RestrictedUser>?=null
 
     //Igualmente, se guardará las peticiones de alguien que quiere ser amigo del usuario en una lista de peticiones de usuario.
 
-    var listaPeticiones:MutableList<User>?=null
+    var listaPeticiones:MutableList<RestrictedUser>?=null
 
     var listaSeries:MutableList<ShowState>? = null
 

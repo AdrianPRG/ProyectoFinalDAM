@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.AddFriendScreen
+import com.alopgal962.myshowsreviews.shows.shows.ui.screens.AddShow
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.StatisticsScreen
 import com.alopgal962.myshowsreviews.ui.theme.MyShowsReviewsTheme
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.LoginScreen
@@ -48,6 +49,8 @@ class MainActivity : ComponentActivity() {
                         )  }
                         composable("ShowExplained/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
                             ShowExplained(GenericAndApiVM = GenericAndApiVM,navController = navController) }
+                        composable("AddShow/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
+                            AddShow(userVM = UserVM,navController = navController) }
                         composable(Routes.myshowsroute.route){ MyShowsScreen(
                             uservm = UserVM,
                             genericAndApiVM =GenericAndApiVM ,

@@ -92,7 +92,7 @@ fun AddFriendScreen(GenericVM:GenericAndApiVM, UserVM:UserVM, navController: Nav
                 if (user.listaPeticiones?.isNotEmpty() == true){
                     LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 400.dp), modifier = Modifier.fillMaxWidth().height(400.dp)) {
                         items(user.listaPeticiones!!){
-                            MostrarNotificacion(usuario = it,{},{UserVM.eliminarSolicitud(it.email.toString())})
+                            MostrarNotificacion(usuario = it  ,{},{UserVM.eliminarSolicitud(it.email.toString())})
                         }
                     }
                 }

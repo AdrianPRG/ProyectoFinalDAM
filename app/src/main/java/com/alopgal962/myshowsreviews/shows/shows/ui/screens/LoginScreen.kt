@@ -87,6 +87,7 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
             )
             Button(
                 onClick = { userVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) }
+                    genericAndApiVM.refresh()
                     genericAndApiVM.obtenerPeliculas(genericAndApiVM.numpage)
                     userVM.recuperarSeriesUsuario()
                 },

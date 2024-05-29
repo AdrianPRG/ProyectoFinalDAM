@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 /**
  * @property numpage Es un contador, que cada vez que pulsemos, se incrementará o disminuirá, servirá para ir a la siguiente pagina o a la anterior
@@ -24,7 +25,7 @@ class GenericAndApiVM:ViewModel() {
 
 
     //Numero de pagina que ira incrementandose
-    var numpage = 1
+    var numpage = (1..499).random()
 
     //Instanciamos el repositorio, donde tenemos almacenadas las funciones de conversion y recuperacion de datos
     val ShowsRepository = ShowRepository()
@@ -78,6 +79,9 @@ class GenericAndApiVM:ViewModel() {
         }
     }
 
+    fun refresh(){
+        numpage = (1..499).random()
+    }
 
     /*
        La funcion refresh avanza o retrocede en las paginas

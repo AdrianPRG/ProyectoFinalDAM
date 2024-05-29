@@ -21,17 +21,6 @@ class ShowRepository {
 
     }
 
-    suspend fun GetInfoShow(nombre:String):ShowsState{
-        val response = service.getPelicula(nombre)
-        return if (response.isSuccessful) {
-            response.body()!!.toShowsState()
-        }
-        else{
-            ShowsState()
-        }
-    }
-
-
     private fun ShowsModel.toShowsState():ShowsState{
         return ShowsState(
 

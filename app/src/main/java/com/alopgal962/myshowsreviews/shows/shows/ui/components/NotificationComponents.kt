@@ -28,10 +28,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alopgal962.myshowsreviews.shows.shows.data.model.RestrictedUser
 import com.alopgal962.myshowsreviews.shows.shows.data.model.User
 
 @Composable
-fun MostrarNotificacion(usuario: User,onAcceptClick:() -> Unit ,onDeleteclick:() -> Unit){
+fun MostrarNotificacion(usuario: RestrictedUser,onAcceptClick:() -> Unit ,onDeleteclick:() -> Unit){
     Column(modifier = Modifier
         .padding(top = 30.dp)
         .background(color = Color(234, 196, 53))

@@ -17,9 +17,6 @@ interface GetApiService {
     @GET(peliculas + key)
     suspend fun getPeliculas(@Query("page")pagenum:Int): Response<ShowsModel>
 
-    @GET(peliculas + key)
-    suspend fun getPelicula(@Query("query")nombre:String): Response<ShowsModel>
-
     @GET(mejorvaloradas + key)
     suspend fun getMejoresPelis(): Response<ShowsModel>
 

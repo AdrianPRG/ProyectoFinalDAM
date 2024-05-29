@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alopgal962.myshowsreviews.shows.shows.data.model.RestrictedUser
 import com.alopgal962.myshowsreviews.shows.shows.data.model.User
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.google.firebase.Firebase
@@ -27,7 +28,13 @@ class UserVM : ViewModel() {
     //Usuario a mostrar en la UI
     var user = _user.asStateFlow()
 
-    var addingShow by mutableStateOf(false)
+    private var _showInsertar = MutableStateFlow(ShowState())
+
+    var showInsertar = _showInsertar.asStateFlow()
+
+    var myrestricteduser = MutableStateFlow(RestrictedUser())
+    var restricteduser = MutableStateFlow(RestrictedUser())
+
 
     //Campos Inserccion y usuario
     var imagenRegister by mutableStateOf("")
@@ -36,8 +43,8 @@ class UserVM : ViewModel() {
     var passwordRegisterLogin by mutableStateOf("")
 
     //Campos de usuario
-    var listaAmigos:MutableList<User> = mutableListOf()
-    var listaPeticiones:MutableList<User> = mutableListOf()
+    var listaAmigos:MutableList<RestrictedUser> = mutableListOf()
+    var listaPeticiones:MutableList<RestrictedUser> = mutableListOf()
     var listaSeries:MutableList<ShowState> = mutableListOf()
 
 
@@ -95,6 +102,7 @@ fun iniciarsesion(navegacion: () -> Unit) {
 //                            _user.value.listaSeries = it.get("listaSeries") as MutableList<ShowState>
 //                            _user.value.listaPeticiones = it.get("listaPeticiones") as MutableList<String>
                             _user.value = it.toObject<User>()!!
+                            obtainMyRestrictedUser(VMFireAuth.currentUser?.email.toString(),myrestricteduser.value)
                             navegacion()
                         }.addOnFailureListener {
                             Log.d("ERROR-DatosUsuario","Error al obtener los datos de usuario")
@@ -113,15 +121,17 @@ fun iniciarsesion(navegacion: () -> Unit) {
 }
 
 
-fun meterSeriesUsuario(show:ShowState){
+fun comprobacionSerie(show:ShowState, onadding:() -> Unit){
     viewModelScope.launch {
         try {
             if (_user.value.listaSeries!!.contains(show)==true){
                 Log.d("ERROR-INSERCCION-SHOW","El show a introducir ya existe")
             }
             else{
-                _user.value.listaSeries!!.add(show)
-                VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaSeries",_user.value.listaSeries)
+                _showInsertar.value = show
+                onadding()
+                //_user.value.listaSeries!!.add(show)
+                //VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaSeries",_user.value.listaSeries)
             }
         }catch (e:Exception){
             Log.d("ERROR-Serie-insert","Error al insertar la serie")
@@ -134,27 +144,23 @@ fun mandarSolicitud(email:String){
         try {
             var usersended = User()
             //Obtenemos nuestro usuario, con los datos restringidos, es decir, solo los necesarios
-            var UserRestricted=ObtainRestrictedData(VMFireAuth.currentUser?.email.toString())
             //LLamamos a la base de datos, a la coleccion usuarios y al documento del email al que queremos añadir una peticion de nuestro usuario
             VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener { it ->
                 //Comprobamos que el usuario obtenido no es nulo, tambien que no hemos mandado una solicitud a nuestro usuario, y por ultimo comprobamos si ya le habiamos mandado una solicitud de amistad
-                if (it.toObject<User>()==null || it.toObject<User>()?.email == VMFireAuth.currentUser?.email.toString() || it.toObject<User>()?.listaPeticiones!!.contains(UserRestricted)){
+                if (it.toObject<User>()==null || it.toObject<User>()?.email == VMFireAuth.currentUser?.email.toString() || it.toObject<User>()?.listaPeticiones!!.contains(restricteduser.value)){
                     Log.d("USUARIO-NULO","El usuario que se introdujo es nulo o no se puede enviar invitacion de amistad a uno mismo, o quizas ya le ha enviado una peticion de amistad anteriormente")
                     emailFriend.value=""
                 }
                 else{
                     usersended = it.toObject<User>()!!
                     usersended.nombre = it.get("nombre").toString()
-                    VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).get().addOnSuccessListener {
-                        //Añadimos el usario recuperado a la lista
-                        usersended.listaPeticiones?.add(UserRestricted)
-                        //Actualizamos la lista en la base de datos
-                        VMFireDB.collection("Usuarios").document(email).update("listaPeticiones",usersended.listaPeticiones).addOnCompleteListener{
-                            //Restablecemos el valor a cadena vacia
-                            emailFriend.value=""
-                            //Log de confirmacion
-                            Log.d("PETICION-ENVIADA",usersended.listaPeticiones.toString())
-                        }
+                    usersended.listaPeticiones?.add(myrestricteduser.value)
+                    //Actualizamos la lista en la base de datos
+                    VMFireDB.collection("Usuarios").document(email).update("listaPeticiones",usersended.listaPeticiones).addOnCompleteListener{
+                        //Restablecemos el valor a cadena vacia
+                        emailFriend.value=""
+                        //Log de confirmacion
+                        Log.d("PETICION-ENVIADA",usersended.listaPeticiones.toString())
                     }
                 }
             }
@@ -186,7 +192,7 @@ fun ObtenerSolicitudesAmistad(){
     viewModelScope.launch {
         try {
             VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser!!.email.toString()).get().addOnSuccessListener {
-                _user.value.listaPeticiones = it.get("listaPeticiones") as MutableList<User>
+                _user.value.listaPeticiones = it.get("listaPeticiones") as MutableList<RestrictedUser>
             }.addOnFailureListener {
                 exception ->
                 Log.d("ERROR","ERROR AL OBTENER ")
@@ -200,26 +206,21 @@ fun ObtenerSolicitudesAmistad(){
     /*Saca de la base de datos un usuario, sin embargo, los campos peticiones y password seran nulos, ya que
       El usuario que se guarda en la lista de peticiones de otro usuario no debe de poseer estos campos
      */
-fun ObtainRestrictedData(email:String):User{
-    var userPrivate = User()
+fun obtainMyRestrictedUser(email:String, restrictedUser: RestrictedUser){
     viewModelScope.launch {
         try {
             VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener {
                 //Obtenemos solo los datos necesarios, la password no, ya que es algo privado del usuario, y la lista de peticiones igual
-                userPrivate.image = it.get("image").toString()
-                userPrivate.email = it.get("email").toString()
-                userPrivate.nombre = it.get("nombre").toString()
-                userPrivate.password="*********"
-                userPrivate.listaPeticiones = mutableListOf<User>()
-                userPrivate.listaAmigos = it.get("listaAmigos") as MutableList<User>
-                userPrivate.listaSeries = it.get("listaSeries") as MutableList<ShowState>
+                restrictedUser.image = it.get("image").toString()
+                restrictedUser.email = it.get("email").toString()
+                restrictedUser.nombre = it.get("nombre").toString()
+                restrictedUser.listaSeries = it.get("listaSeries") as MutableList<ShowState>
         }
     }
         catch (e:Exception){
             Log.d("ERROR-RESTRICTED-USER","Error al obtener los datos del usuario (restringido)")
         }
     }
-    return userPrivate
 }
 
     /*
@@ -241,7 +242,7 @@ fun deletePelicula(show:ShowState){
     }
 }
     /*
-    Elimina todos las series del usuario de la base de datos
+    Elimina todas las series del usuario de la base de datos
      */
 fun deleteAllShows(){
     viewModelScope.launch {
@@ -256,7 +257,7 @@ fun deleteAllShows(){
 fun eliminarSolicitud(email: String){
     viewModelScope.launch {
         try {
-            _user.value.listaPeticiones?.remove(ObtainRestrictedData(email))
+            _user.value.listaPeticiones?.remove(restricteduser.value)
             VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaPeticiones",_user.value.listaPeticiones)
         }catch (e:Exception){
             Log.d("ERROR-ELIMINAR-SOLICITUD","ERROR")
@@ -282,10 +283,15 @@ fun borrarCampos() {
     passwordRegisterLogin = ""
 }
 
-fun changeOnAddingShowState(){
-    addingShow=!addingShow
+fun setShortTitle(show:ShowState):String{
+    var title=""
+    if (show.titulo!!.length>=25){
+        title=show.titulo!!.substring(0,25) +  "..."
+    }
+    else
+        title = show.titulo!!
+    return title
 }
-
 
     fun comprobacionNombre(): Boolean {
         var disponible = true
