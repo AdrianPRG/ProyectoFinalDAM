@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -53,7 +54,7 @@ fun MostrarShow(Show:ShowState, oninfoclick:() -> Unit, onanadirclick:() -> Unit
         }
         Column(
             Modifier.padding(top = 10.dp ).size(270.dp, 80.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = userVM.setShortTitle(Show), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold ,fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 10.dp))
+            Text(text = userVM.setShortTitle(Show), textAlign = TextAlign.Center, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold ,fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 10.dp))
             Text(text = "Puntuacion: " + Show.puntuacion?.substring(0,3) + " ⭐ ", Modifier.padding(top = 10.dp), fontSize = 13.sp ,color = Color.White,fontFamily = FontFamily.Serif)
             Text(text = "Numero de votos: " + Show.votos, Modifier.padding(top = 10.dp) ,fontSize = 13.sp , color = Color.White,fontFamily = FontFamily.Serif)
         }
