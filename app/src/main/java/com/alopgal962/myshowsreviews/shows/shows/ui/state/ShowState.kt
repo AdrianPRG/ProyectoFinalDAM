@@ -7,6 +7,6 @@ data class ShowState (
     var puntuacion:String? ="",
     var votos:String? = "",
     var fechasalida:String? ="",
-    var mipuntuacion:Int? = 0,
+    var mipuntuacion:String? = "",
     var miresena:String? = ""
 )

@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlin.math.log
 
 @SuppressLint("MutableCollectionMutableState")
 class UserVM : ViewModel() {
@@ -46,6 +47,9 @@ class UserVM : ViewModel() {
     var listaAmigos:MutableList<RestrictedUser> = mutableListOf()
     var listaPeticiones:MutableList<RestrictedUser> = mutableListOf()
     var listaSeries:MutableList<ShowState> = mutableListOf()
+
+    var resena by mutableStateOf("")
+    var puntuacion by mutableStateOf("")
 
 
     //Firebase autenticacion
@@ -130,13 +134,57 @@ fun comprobacionSerie(show:ShowState, onadding:() -> Unit){
             else{
                 _showInsertar.value = show
                 onadding()
-                //_user.value.listaSeries!!.add(show)
-                //VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaSeries",_user.value.listaSeries)
             }
         }catch (e:Exception){
             Log.d("ERROR-Serie-insert","Error al insertar la serie")
         }
     }
+}
+
+fun meterSerieUsuario(navegacion: () -> Unit){
+    viewModelScope.launch {
+        try{
+            if (resena!="" && puntuacion.toInt()>0 && puntuacion.toInt()<=10){
+                //Se establece a la serie que se quiere insertar la puntuacion asignada
+                var show = _showInsertar.value.copy()
+                show.mipuntuacion = puntuacion
+                show.miresena  = resena
+                _user.value.listaSeries?.add(show)
+                //Se añade a la lista local la serie de usuarios
+                Log.d("especificaciones",_showInsertar.value.puntuacion.toString() + showInsertar.value.titulo.toString())
+                //Se restablecen los valores
+                VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaSeries",_user.value.listaSeries).addOnSuccessListener {
+                    navegacion()
+                    ResetSerieInsert()
+                    recuperarSeriesUsuario()
+                    Log.d("inserccioncorrecta","serie insertada")
+                }
+            }
+            else{
+                Log.d("ERROR-INSERCCION-SERIE","La reseña/puntuacion no pueden ser nul@s!")
+            }
+        }
+        catch (e:Exception){
+            Log.d("ERROR-TRY-INSERCCION-SERIE","Error al intentar añadir la serie")
+        }
+    }
+}
+
+fun checkShowRate(show:ShowState):String{
+    var puntuacion=""
+    if (show.puntuacion!!.length>=4){
+        puntuacion=show.puntuacion!!.substring(0,3)
+    }
+    else{
+        puntuacion=show.puntuacion.toString()
+    }
+    return puntuacion
+}
+
+fun ResetSerieInsert(){
+    resena=""
+    puntuacion=""
+    _showInsertar.value = ShowState()
 }
 
 fun mandarSolicitud(email:String){

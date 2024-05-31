@@ -71,7 +71,7 @@ fun MyShow(show:ShowState,userVM: UserVM,navController: NavController){
                 Icon(imageVector = Icons.Default.Edit, contentDescription = "Reseña" , tint = Color.White, modifier = Modifier
                     .padding(end = 10.dp, bottom = 5.dp)
                     .size(30.dp, 30.dp))
-                Text(text = "Reseña: Proximamente...",color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = "Reseña: " + show.miresena,color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
             }
             Row(modifier = Modifier
                 .padding(top = 10.dp, start = 10.dp)

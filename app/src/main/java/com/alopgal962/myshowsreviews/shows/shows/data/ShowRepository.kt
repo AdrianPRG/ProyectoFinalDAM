@@ -35,7 +35,7 @@ class ShowRepository {
             puntuacion = this.puntuacion,
             votos = this.votos,
             fechasalida = this.fechasalida,
-            mipuntuacion = 0,
+            mipuntuacion = "",
             miresena = ""
         )
     }
