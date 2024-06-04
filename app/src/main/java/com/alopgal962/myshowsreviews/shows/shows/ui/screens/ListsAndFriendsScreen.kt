@@ -63,36 +63,19 @@ fun AddFriendScreen(GenericVM:GenericAndApiVM, UserVM:UserVM, navController: Nav
             .padding(top = 110.dp, bottom = 100.dp)
             .fillMaxSize()
             .background(color = Color(232, 239, 236)), horizontalAlignment = Alignment.CenterHorizontally) {
-                BadgedBox(modifier = Modifier.padding(top = 30.dp),badge = { Badge(containerColor = Color.Green, modifier = Modifier
-                    .padding(top = 20.dp, end = 10.dp)
-                    .size(25.dp, 20.dp)){ Text(text = user.listaPeticiones!!.count().toString(), color = Color.Black)} }) {
-                    OutlinedButton(onClick = {  }, border = BorderStroke(2.dp, color = Color.Black),colors = ButtonDefaults.buttonColors(containerColor = Color(	72, 119, 194))) {
-                        Text(text = "Solicitudes", color = Color.White, fontStyle = FontStyle.Normal, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
-                    }
-                }
-            Row(modifier = Modifier
-                .padding(top = 20.dp)
-                .size(320.dp, 100.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                TextField(
-                    //textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
-                    shape = RoundedCornerShape(20.dp),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.White, textColor = Color.Black),
-                    trailingIcon = { Icon(imageVector = Icons.Default.Send, contentDescription = "", tint = Color.Black, modifier = Modifier
-                        .size(30.dp, 30.dp)
-                        .clickable { UserVM.mandarSolicitud(UserVM.emailFriend.value) }) },
-                    leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon", tint = Color.Black)},
-                    modifier = Modifier
-                    .clip(RoundedCornerShape(15.dp)),value = UserVM.emailFriend.value, onValueChange = {UserVM.emailFriend.value = it}, label = { Text(text = "Introduce correo de amigo", color = Color.Black, fontSize = 13.sp)})
-            }
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
                 .background(color = Color(227, 214, 146)), horizontalAlignment = Alignment.CenterHorizontally) {
-                if (user.listaPeticiones?.isNotEmpty() == true){
-                    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 400.dp), modifier = Modifier.fillMaxWidth().height(400.dp)) {
-                        items(user.listaPeticiones!!){
-                            MostrarNotificacion(usuario = it  ,{},{UserVM.eliminarSolicitud(it.email.toString())})
+                if (UserVM.userlist.value.isNotEmpty()) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(minSize = 400.dp),
+                        modifier = Modifier.fillMaxWidth().height(400.dp)
+                    ) {
+                        items(UserVM.userlist.value) {
+                            MostrarNotificacion(usuario = it,
+                                {},
+                                { })
                         }
                     }
                 }

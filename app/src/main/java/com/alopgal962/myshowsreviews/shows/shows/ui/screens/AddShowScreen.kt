@@ -16,10 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -88,7 +91,7 @@ fun AddShow(userVM: UserVM,navController: NavController){
                     .fillMaxWidth()
                     .height(100.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                     TextField(modifier = Modifier.clip(RoundedCornerShape(20.dp)), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),placeholder = { Text("Puntuacion del 1 al 10")},value = userVM.puntuacion, onValueChange = { userVM.puntuacion = it }, label = { Text(
-                        text = "Introduce tu puntuacion.."
+                        text = "Introduce tu puntuacion..", color = Color.White
                     )}, leadingIcon = { Icon(imageVector = Icons.Default.Star, contentDescription = "", tint = Color.White)}, singleLine = true, maxLines = 1, colors = TextFieldDefaults.textFieldColors(containerColor = Color(35, 54, 71), textColor = Color.White))
                 }
                 Row(modifier = Modifier
@@ -96,18 +99,21 @@ fun AddShow(userVM: UserVM,navController: NavController){
                     .fillMaxWidth()
                     .height(100.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                     TextField(modifier = Modifier.clip(RoundedCornerShape(20.dp)),placeholder = { Text("Increible, me ha encantado")},value = userVM.resena, onValueChange = {userVM.resena = it}, label = { Text(
-                        text = "Introduce tu reseña..."
+                        text = "Introduce tu reseña...", color = Color.White
                     )},leadingIcon = {Icon(imageVector = Icons.Default.Edit, contentDescription = "", tint = Color.White)}, singleLine = true, maxLines = 1, colors = TextFieldDefaults.textFieldColors(containerColor = Color(35, 54, 71), textColor = Color.White))
                 }
                 Row(modifier = Modifier
                     .padding(start = 20.dp, end = 20.dp)
                     .fillMaxWidth()
                     .height(100.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                    Button(onClick = { userVM.meterSerieUsuario { navController.navigate(Routes.mainRoute.route) } }) {
-                        Text(text = "Insertar")
+                    Button(colors = ButtonDefaults.buttonColors(containerColor = Color.Green),onClick = { userVM.meterSerieUsuario { navController.navigate(Routes.mainRoute.route) } }) {
+                        Text(text = "Insertar", fontFamily = FontFamily.Serif)
+                        Icon(imageVector = Icons.Default.Add, tint = Color.White, contentDescription = "", modifier = Modifier.padding(start = 10.dp))
                     }
                     Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(start = 20.dp)) {
-                        Text(text = "Vaciar")
+                        Text(text = "Vaciar", fontFamily = FontFamily.Serif)
+                        Icon(imageVector = Icons.Default.Delete, tint = Color.White, contentDescription = "", modifier = Modifier.padding(start = 10.dp))
+
                     }
                 }
             }

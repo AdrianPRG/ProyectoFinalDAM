@@ -32,7 +32,7 @@ import com.alopgal962.myshowsreviews.shows.shows.data.model.RestrictedUser
 import com.alopgal962.myshowsreviews.shows.shows.data.model.User
 
 @Composable
-fun MostrarNotificacion(usuario: RestrictedUser,onAcceptClick:() -> Unit ,onDeleteclick:() -> Unit){
+fun MostrarNotificacion(usuario: User,onAcceptClick:() -> Unit ,onDeleteclick:() -> Unit){
     Column(modifier = Modifier
         .padding(top = 30.dp)
         .background(color = Color(234, 196, 53))

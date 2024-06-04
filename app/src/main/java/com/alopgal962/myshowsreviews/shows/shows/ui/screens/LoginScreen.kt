@@ -95,6 +95,7 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
                     genericAndApiVM.refresh()
                     genericAndApiVM.obtenerPeliculas(genericAndApiVM.numpage)
                     userVM.recuperarSeriesUsuario()
+                    userVM.obtenerListaUsuarios()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                 modifier = Modifier

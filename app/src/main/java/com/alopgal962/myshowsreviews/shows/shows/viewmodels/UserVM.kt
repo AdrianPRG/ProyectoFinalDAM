@@ -25,13 +25,18 @@ class UserVM : ViewModel() {
 
     //Usuario
     private var _user = MutableStateFlow(User())
-
     //Usuario a mostrar en la UI
     var user = _user.asStateFlow()
 
+    //Esta variable almacenará el valor de el show que queramos insertar
     private var _showInsertar = MutableStateFlow(ShowState())
-
+    //Variable que se mostrará en la Ui
     var showInsertar = _showInsertar.asStateFlow()
+
+    //Lista de usuarios en los que podremos ver sus series y calificaciones
+    private var _usersList = MutableStateFlow<List<User>>(emptyList())
+    //Lista que se mostrará en la UI
+    var userlist = _usersList.asStateFlow()
 
     var myrestricteduser = MutableStateFlow(RestrictedUser())
     var restricteduser = MutableStateFlow(RestrictedUser())
@@ -50,7 +55,6 @@ class UserVM : ViewModel() {
 
     var resena by mutableStateOf("")
     var puntuacion by mutableStateOf("")
-
 
     //Firebase autenticacion
     var VMFireAuth = Firebase.auth
@@ -91,6 +95,8 @@ class UserVM : ViewModel() {
     }
 }
 
+
+
 fun iniciarsesion(navegacion: () -> Unit) {
     viewModelScope.launch {
         try {
@@ -128,7 +134,7 @@ fun iniciarsesion(navegacion: () -> Unit) {
 fun comprobacionSerie(show:ShowState, onadding:() -> Unit){
     viewModelScope.launch {
         try {
-            if (_user.value.listaSeries!!.contains(show)==true){
+            if (_user.value.listaSeries!!.contains(show)){
                 Log.d("ERROR-INSERCCION-SHOW","El show a introducir ya existe")
             }
             else{
@@ -187,33 +193,21 @@ fun ResetSerieInsert(){
     _showInsertar.value = ShowState()
 }
 
-fun mandarSolicitud(email:String){
+fun obtenerListaUsuarios(){
     viewModelScope.launch {
         try {
-            var usersended = User()
-            //Obtenemos nuestro usuario, con los datos restringidos, es decir, solo los necesarios
-            //LLamamos a la base de datos, a la coleccion usuarios y al documento del email al que queremos añadir una peticion de nuestro usuario
-            VMFireDB.collection("Usuarios").document(email).get().addOnSuccessListener { it ->
-                //Comprobamos que el usuario obtenido no es nulo, tambien que no hemos mandado una solicitud a nuestro usuario, y por ultimo comprobamos si ya le habiamos mandado una solicitud de amistad
-                if (it.toObject<User>()==null || it.toObject<User>()?.email == VMFireAuth.currentUser?.email.toString() || it.toObject<User>()?.listaPeticiones!!.contains(restricteduser.value)){
-                    Log.d("USUARIO-NULO","El usuario que se introdujo es nulo o no se puede enviar invitacion de amistad a uno mismo, o quizas ya le ha enviado una peticion de amistad anteriormente")
-                    emailFriend.value=""
-                }
-                else{
-                    usersended = it.toObject<User>()!!
-                    usersended.nombre = it.get("nombre").toString()
-                    usersended.listaPeticiones?.add(myrestricteduser.value)
-                    //Actualizamos la lista en la base de datos
-                    VMFireDB.collection("Usuarios").document(email).update("listaPeticiones",usersended.listaPeticiones).addOnCompleteListener{
-                        //Restablecemos el valor a cadena vacia
-                        emailFriend.value=""
-                        //Log de confirmacion
-                        Log.d("PETICION-ENVIADA",usersended.listaPeticiones.toString())
-                    }
-                }
-            }
+            var listatemporal = mutableListOf<User>()
+            var documentos = VMFireDB.collection("Usuarios").document().get().await()
+                 var users = documentos as MutableList<User>
+                 if (users.isNotEmpty()){
+                     for ( user in users){
+                        listatemporal.add(user)
+                         Log.d("listauser",listatemporal.toString())
+                     }
+                     _usersList.value = listatemporal
+             }
         }catch (e:Exception){
-            Log.d("ERROR-SOLICITUD","Error al mandar solicitud, excepcion captada")
+            Log.d("ERROR-OBTAIN-USERS","error al obtener los usuarios de la db")
         }
     }
 }
@@ -232,21 +226,6 @@ fun recuperarSeriesUsuario(){
             }
         }catch (e:Exception){
             Log.d("ERROR-RECUPERAR","Error al recuperar las series")
-        }
-    }
-}
-
-fun ObtenerSolicitudesAmistad(){
-    viewModelScope.launch {
-        try {
-            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser!!.email.toString()).get().addOnSuccessListener {
-                _user.value.listaPeticiones = it.get("listaPeticiones") as MutableList<RestrictedUser>
-            }.addOnFailureListener {
-                exception ->
-                Log.d("ERROR","ERROR AL OBTENER ")
-            }
-        }catch (e:Exception){
-            Log.d("ERROR-OBTAIN-DATA","ERROR al obtener las solicitudes")
         }
     }
 }
@@ -302,17 +281,6 @@ fun deleteAllShows(){
         }
     }
 }
-fun eliminarSolicitud(email: String){
-    viewModelScope.launch {
-        try {
-            _user.value.listaPeticiones?.remove(restricteduser.value)
-            VMFireDB.collection("Usuarios").document(VMFireAuth.currentUser?.email.toString()).update("listaPeticiones",_user.value.listaPeticiones)
-        }catch (e:Exception){
-            Log.d("ERROR-ELIMINAR-SOLICITUD","ERROR")
-        }
-    }
-}
-
     //Cierra sesion, el usuario es nulo
 fun cerrarSesion(navegacion: () -> Unit){
     try {
@@ -340,23 +308,4 @@ fun setShortTitle(show:ShowState):String{
         title = show.titulo!!
     return title
 }
-
-    fun comprobacionNombre(): Boolean {
-        var disponible = true
-        try {
-            VMFireDB.collection("Usuarios").whereEqualTo("nombre", nombreRegister).get()
-                .addOnSuccessListener { datos ->
-                    for (doc in datos) {
-                        if (doc.getString("nombre") == nombreRegister) {
-                            disponible = false
-                        }
-                    }
-                }.addOnFailureListener {
-                    Log.d("ErrorAccesoNombre", "Error al acceder a la base de datos")
-                }
-        } catch (e: Exception) {
-            Log.d("ErrorComprobacion", "Error al comprobar nombre de usuario")
-        }
-        return disponible
-    }
 }
