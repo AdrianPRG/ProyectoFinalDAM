@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
-import com.alopgal962.myshowsreviews.shows.shows.ui.screens.AddFriendScreen
+import com.alopgal962.myshowsreviews.shows.shows.ui.screens.DiscoverPeople
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.AddShow
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.StatisticsScreen
 import com.alopgal962.myshowsreviews.ui.theme.MyShowsReviewsTheme
@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.mainRoute.route) { MainScreen(UserVM = UserVM, GenericAndApiVM = GenericAndApiVM ,navController = navController) }
                         composable(Routes.loginRoute.route) { LoginScreen(userVM = UserVM, genericAndApiVM = GenericAndApiVM(), navController = navController) }
                         composable(Routes.stadisticsRoute.route) { StatisticsScreen( UserVM = UserVM, GenericAndApiVM = GenericAndApiVM, navController = navController ) }
-                        composable(Routes.addfriendsRoute.route) { AddFriendScreen(
+                        composable(Routes.addfriendsRoute.route) { DiscoverPeople(
                             GenericVM = GenericAndApiVM,
                             UserVM =UserVM ,
                             navController = navController

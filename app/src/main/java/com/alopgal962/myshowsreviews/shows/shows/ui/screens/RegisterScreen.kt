@@ -126,7 +126,14 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                 )
                 TextField(
                     value = userVM.nombreRegister,
-                    onValueChange = { userVM.nombreRegister = it },
+                    singleLine = true,
+                    onValueChange = { if (userVM.nombreRegister.length<=10){
+
+                        userVM.nombreRegister = it }
+                        else{
+                            userVM.nombreRegister = it
+                    }
+                                                                           },
                     label = { Text(text = "Nombre de usuario", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -160,6 +167,7 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                 TextField(
                     value = userVM.emaiLRegisterLogin,
                     onValueChange = { userVM.emaiLRegisterLogin = it },
+                    singleLine = true,
                     label = { Text(text = "Correo electronico", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -196,6 +204,7 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                     label = { Text(text = "Contraseña", color = Color.White) },
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    singleLine = true,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color(35, 54, 71),
@@ -220,7 +229,8 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
 
             ) {
                 Button(
-                    onClick = { userVM.registrarme { navController.navigate(Routes.loginRoute.route) } },
+                    onClick = {
+                        userVM.registrarme { navController.navigate(Routes.loginRoute.route) } },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                     modifier = Modifier
                         .padding(end = 40.dp)

@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -63,7 +64,8 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                     RoundedCornerShape(45.dp)
                 )
                 .background(color = Color(35, 54, 71)), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Cuenta de ${user.nombre}", color = Color.White, modifier = Modifier.padding(top = 15.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
+                Text(text = "Cuenta: ${user.nombre}", color = Color.White, modifier = Modifier.padding(top = 15.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
+                Text(text = "ID: ${user.identificador}", color = Color.White, modifier = Modifier.padding(top = 5.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
                 Image(painter = ReturnProfile(imageString = user.image.toString()), contentDescription = "imagen", modifier = Modifier
                     .padding(top = 20.dp)
                     .size(100.dp, 100.dp)
@@ -109,6 +111,7 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                         .size(30.dp, 30.dp)
                         .clickable { UserVM.deleteAllShows()
                             UserVM.recuperarSeriesUsuario()
+                            UserVM.obtenerListaUsuarios()
                         navController.navigate(Routes.stadisticsRoute.route)}
                     )
                 }
