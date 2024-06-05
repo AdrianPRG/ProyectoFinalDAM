@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 @SuppressLint("MutableCollectionMutableState")
 class UserVM : ViewModel() {
@@ -34,14 +35,13 @@ class UserVM : ViewModel() {
     var showInsertar = _showInsertar.asStateFlow()
 
     var myrestricteduser = MutableStateFlow(RestrictedUser())
-    var restricteduser = MutableStateFlow(RestrictedUser())
-
 
     //Campos Inserccion y usuario
     var imagenRegister by mutableStateOf("")
     var nombreRegister by mutableStateOf("")
     var emaiLRegisterLogin by mutableStateOf("")
     var passwordRegisterLogin by mutableStateOf("")
+    var identificador by mutableStateOf("")
 
     //Campos de usuario
     var listaAmigos: MutableList<RestrictedUser> = mutableListOf()
@@ -65,26 +65,31 @@ class UserVM : ViewModel() {
     fun registrarme(navegacion: () -> Unit) {
         viewModelScope.launch {
             try {
-                if (imagenRegister != "" && nombreRegister != "" && emaiLRegisterLogin != "" && passwordRegisterLogin.length >= 6) {
-                    VMFireAuth.createUserWithEmailAndPassword(
-                        emaiLRegisterLogin,
-                        passwordRegisterLogin
-                    )
-                        .addOnCompleteListener {
+                if (imagenRegister != "" && nombreRegister != "" && emaiLRegisterLogin != "" && passwordRegisterLogin.length >= 6 ) {
+                    VMFireAuth.createUserWithEmailAndPassword(emaiLRegisterLogin, passwordRegisterLogin).addOnCompleteListener {
                             if (it.isSuccessful) {
+                                generateId()
+                                setID()
                                 VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).set(
                                     hashMapOf(
+                                        "id" to identificador,
                                         "image" to imagenRegister,
                                         "nombre" to nombreRegister,
                                         "email" to emaiLRegisterLogin,
                                         "password" to passwordRegisterLogin,
                                         "listaAmigos" to listaAmigos,
                                         "listaPeticiones" to listaPeticiones,
-                                        "listaSeries" to listaSeries
+                                        "listaSeries" to listaSeries,
                                     )
                                 ).addOnCompleteListener {
-                                    navegacion()
-                                    borrarCampos()
+                                    VMFireDB.collection("Identificadores").document(identificador + nombreRegister).set(
+                                        hashMapOf(
+                                            "id" to generateId()
+                                        )
+                                    ).addOnCompleteListener{
+                                        navegacion()
+                                        borrarCampos()
+                                    }
                                 }
                             }
                         }
@@ -209,8 +214,7 @@ class UserVM : ViewModel() {
             try {
                 var listatemporal = mutableListOf<ShowState>()
                 if (emaiLRegisterLogin.isNotEmpty()) {
-                    var documento =
-                        VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().await()
+                    var documento = VMFireDB.collection("Usuarios").document(emaiLRegisterLogin).get().await()
                     var lista = documento as MutableList<ShowState>
                     for (show in lista) {
                         listatemporal.add(show)
@@ -306,6 +310,27 @@ class UserVM : ViewModel() {
         } else
             title = show.titulo!!
         return title
+    }
+
+    fun setID(){
+        if (generateId().toInt()==0){
+            identificador = "0" + UUID.randomUUID().toString().substring(0,2)
+        }
+        else{
+            identificador = generateId().toString() + UUID.randomUUID().toString().substring(0,2)
+        }
+    }
+
+    fun generateId():Int{
+        var cont=0
+        viewModelScope.launch {
+            VMFireDB.collection("Identificadores").get().addOnSuccessListener {
+                for (doc in it){
+                    cont+=1
+                }
+            }
+        }
+        return cont
     }
 
 }

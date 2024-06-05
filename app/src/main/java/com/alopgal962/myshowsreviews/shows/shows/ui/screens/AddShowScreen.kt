@@ -104,7 +104,10 @@ fun AddShow(userVM: UserVM,navController: NavController){
                     .padding(start = 20.dp, end = 20.dp)
                     .fillMaxWidth()
                     .height(100.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                    Button(onClick = { userVM.añadirSerieDB { navController.navigate(Routes.mainRoute.route) } }, colors = ButtonDefaults.buttonColors(containerColor = Color(61, 102, 63))) {
+                    Button(onClick = { userVM.añadirSerieDB {
+                        navController.navigate(Routes.mainRoute.route)
+                        userVM.obtenerListaUsuarios()
+                    } }, colors = ButtonDefaults.buttonColors(containerColor = Color(61, 102, 63))) {
                         Text(text = "Insertar",fontFamily = FontFamily.Serif, color = Color.White)
                         Icon(imageVector = Icons.Default.Add, contentDescription = "", modifier = Modifier.padding(start = 10.dp))
                     }

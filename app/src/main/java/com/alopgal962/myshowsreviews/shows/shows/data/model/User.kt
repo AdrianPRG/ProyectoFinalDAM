@@ -8,6 +8,8 @@ class User {
     //var id:String?=null
     //Nombre del usuario
 
+    var identificador:String?=null
+
     var nombre:String?=null
 
     //Email
@@ -31,6 +33,8 @@ class User {
     //Aqui se guardará la imagen que el usuario elige
 
     var image:String? = null
+
+    var puntuacionMedia:String? = null
 
 
     fun showUserInfo(user:User):String{

@@ -51,13 +51,13 @@ fun MostrarUsuario(usuario: User, onAcceptClick:() -> Unit, onDeleteclick:() -> 
                 .clip(RoundedCornerShape(3.dp))
                 .border(width = 3.dp, color = Color.Black)
                 .background(color = Color(222, 200, 140)), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Text(text = usuario.nombre.toString(), fontStyle = FontStyle.Normal, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, fontSize = 12.sp, color = Color.Black, textAlign = TextAlign.Center)
+                Text(text = usuario.nombre.toString(), fontStyle = FontStyle.Normal, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, fontSize = 12.sp, color = Color.Black, textAlign = TextAlign.Center, modifier = Modifier.padding(5.dp))
                 Image(painter = ReturnProfile(imageString = usuario.image.toString()), contentDescription = "Imagen de usuario",modifier = Modifier
                     .padding(top = 10.dp)
                     .size(60.dp, 60.dp)
                     .clip(RoundedCornerShape(40.dp)))
                 Spacer(modifier = Modifier.padding(top = 3.dp, bottom = 3.dp).fillMaxWidth().height(1.dp).border(width = 1.dp, color = Color.White))
-                Text(modifier = Modifier.padding(top = 15.dp, bottom = 5.dp),text = "Series Calificadas:", color = Color.Black, fontFamily = FontFamily.Serif, textAlign = TextAlign.Center, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                Text(modifier = Modifier.padding(top = 10.dp, bottom = 5.dp),text = "Series Calificadas:", color = Color.Black, fontFamily = FontFamily.Serif, textAlign = TextAlign.Center, fontSize = 12.sp, fontWeight = FontWeight.Medium)
                 Text(text = usuario.listaSeries?.count().toString(), modifier = Modifier.padding(top = 10.dp), color = Color.Black, fontFamily =  FontFamily.Serif, textAlign =  TextAlign.Center)
             }
         Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {

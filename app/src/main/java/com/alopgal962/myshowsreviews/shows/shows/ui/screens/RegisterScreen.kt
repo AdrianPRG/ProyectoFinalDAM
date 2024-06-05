@@ -229,7 +229,8 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
 
             ) {
                 Button(
-                    onClick = { userVM.registrarme { navController.navigate(Routes.loginRoute.route) } },
+                    onClick = {
+                        userVM.registrarme { navController.navigate(Routes.loginRoute.route) } },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                     modifier = Modifier
                         .padding(end = 40.dp)
