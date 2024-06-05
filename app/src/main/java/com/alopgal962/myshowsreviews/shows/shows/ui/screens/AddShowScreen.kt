@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,10 +15,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -69,7 +70,7 @@ fun AddShow(userVM: UserVM,navController: NavController){
                     }
         }
         LazyColumn(modifier = Modifier
-            .padding(end = 15.dp, start = 15.dp, bottom = 30.dp)
+            .padding(end = 25.dp, start = 25.dp, bottom = 30.dp)
             .fillMaxSize()
             .clip(RoundedCornerShape(10.dp))
             .border(width = 3.dp, color = Color.Black)
@@ -103,11 +104,13 @@ fun AddShow(userVM: UserVM,navController: NavController){
                     .padding(start = 20.dp, end = 20.dp)
                     .fillMaxWidth()
                     .height(100.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                    Button(onClick = { userVM.meterSerieUsuario { navController.navigate(Routes.mainRoute.route) } }) {
-                        Text(text = "Insertar")
+                    Button(onClick = { userVM.añadirSerieDB { navController.navigate(Routes.mainRoute.route) } }, colors = ButtonDefaults.buttonColors(containerColor = Color(61, 102, 63))) {
+                        Text(text = "Insertar",fontFamily = FontFamily.Serif, color = Color.White)
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "", modifier = Modifier.padding(start = 10.dp))
                     }
-                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(start = 20.dp)) {
-                        Text(text = "Vaciar")
+                    Button(onClick = { userVM.ResetSerieValues() }, modifier = Modifier.padding(start = 20.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(121, 29, 22 ))) {
+                        Text(text = "Vaciar", fontFamily = FontFamily.Serif, color = Color.White)
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "", modifier = Modifier.padding(start = 10.dp))
                     }
                 }
             }
