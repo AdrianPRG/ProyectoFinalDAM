@@ -59,7 +59,6 @@ fun DiscoverPeople(GenericVM:GenericAndApiVM, UserVM:UserVM, navController: NavC
             .fillMaxSize()
             .background(color = Color(232, 239, 236)), horizontalAlignment = Alignment.CenterHorizontally) {
             Column(modifier = Modifier
-                .padding(top = 20.dp, bottom = 20.dp)
                 .fillMaxSize()
                 .background(color = Color(227, 214, 146)), horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(modifier = Modifier
@@ -72,9 +71,9 @@ fun DiscoverPeople(GenericVM:GenericAndApiVM, UserVM:UserVM, navController: NavC
                     } )
                 }
                 if (UserVM.listaUsuarios.isNotEmpty() == true){
-                    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 500.dp), horizontalArrangement = Arrangement.spacedBy(20.dp), modifier = Modifier
+                    LazyVerticalGrid(columns = GridCells.Fixed(1), horizontalArrangement = Arrangement.spacedBy(20.dp), modifier = Modifier
                         .fillMaxWidth()
-                        .height(500.dp)) {
+                        .height(560.dp)) {
                         items(UserVM.listaUsuarios){
                             MostrarUsuario(usuario = it  ,{},{})
                         }

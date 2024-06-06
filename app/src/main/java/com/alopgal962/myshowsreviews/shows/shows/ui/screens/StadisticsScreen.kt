@@ -65,7 +65,6 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                 )
                 .background(color = Color(35, 54, 71)), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Cuenta: ${user.nombre}", color = Color.White, modifier = Modifier.padding(top = 15.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
-                Text(text = "ID: ${user.identificador}", color = Color.White, modifier = Modifier.padding(top = 5.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
                 Image(painter = ReturnProfile(imageString = user.image.toString()), contentDescription = "imagen", modifier = Modifier
                     .padding(top = 20.dp)
                     .size(100.dp, 100.dp)

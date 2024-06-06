@@ -8,8 +8,6 @@ class User {
     //var id:String?=null
     //Nombre del usuario
 
-    var identificador:String?=null
-
     var nombre:String?=null
 
     //Email
