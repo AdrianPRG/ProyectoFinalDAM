@@ -104,7 +104,7 @@ fun AddShow(userVM: UserVM,navController: NavController){
                     .padding(start = 20.dp, end = 20.dp)
                     .fillMaxWidth()
                     .height(100.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                    Button(onClick = { userVM.añadirSerieDB {
+                    Button(onClick = { userVM.anadirSerieDB {
                         navController.navigate(Routes.mainRoute.route)
                         userVM.obtenerListaUsuarios()
                     } }, colors = ButtonDefaults.buttonColors(containerColor = Color(61, 102, 63))) {

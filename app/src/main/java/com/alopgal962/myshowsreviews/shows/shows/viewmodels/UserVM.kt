@@ -157,7 +157,7 @@ class UserVM : ViewModel() {
 
 
 
-    fun añadirSerieDB(navegacion: () -> Unit) {
+    fun anadirSerieDB(navegacion: () -> Unit) {
         viewModelScope.launch {
             try {
                 if (resena != "" && puntuacion.toInt() > 0 && puntuacion.toInt() <= 10) {
