@@ -131,7 +131,7 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
 
                         userVM.nombreRegister = it }
                         else{
-                            userVM.nombreRegister = it
+                            userVM.nombreRegister = ""
                     }
                                                                            },
                     label = { Text(text = "Nombre de usuario", color = Color.White) },
@@ -237,14 +237,14 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                         .padding(end = 40.dp)
                         .size(width = 130.dp, height = 50.dp)
                 ) {
-                    Text(text = "Registrarme")
+                    Text(text = "Registrarme", color = Color.White, fontSize = 12.5.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif)
                 }
                 Button(
                     onClick = { userVM.borrarCampos() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(210, 120, 120)),
                     modifier = Modifier.size(width = 130.dp, height = 50.dp)
                 ) {
-                    Text(text = "Cancelar")
+                    Text(text = "Borrar", color = Color.White,fontWeight = FontWeight.Black, fontFamily = FontFamily.Serif)
                 }
             }
             Text(

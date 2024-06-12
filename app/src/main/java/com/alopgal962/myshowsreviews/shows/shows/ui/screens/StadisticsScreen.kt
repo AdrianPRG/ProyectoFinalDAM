@@ -63,8 +63,9 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                 .clip(
                     RoundedCornerShape(45.dp)
                 )
-                .background(color = Color(35, 54, 71)), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Cuenta: ${user.nombre}", color = Color.White, modifier = Modifier.padding(top = 15.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
+                .background(color = Color(35, 54, 71)), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Text(text = "Cuenta:", color = Color.White, modifier = Modifier.padding(top = 15.dp), fontFamily = FontFamily.Serif, textAlign = TextAlign.Center)
+                Text(text = user.nombre.toString(), color = Color.White, modifier = Modifier.padding(top = 15.dp, bottom = 10.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
                 Image(painter = ReturnProfile(imageString = user.image.toString()), contentDescription = "imagen", modifier = Modifier
                     .padding(top = 20.dp)
                     .size(100.dp, 100.dp)
@@ -82,18 +83,10 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                 Row(modifier = Modifier
                     .padding(top = 20.dp)
                     .size(250.dp, 45.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                    Icon(imageVector = Icons.Default.Face, contentDescription = "Imagen Series", tint = Color.White, modifier = Modifier
-                        .padding(end = 10.dp)
-                        .size(30.dp, 30.dp))
-                    Text(text = "Numero de amigos: ${user.listaAmigos?.count()}",fontFamily = FontFamily.Serif, color = Color.White)
-                }
-                Row(modifier = Modifier
-                    .padding(top = 20.dp)
-                    .size(250.dp, 45.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Imagen Calificaciones", tint = Color.White, modifier = Modifier
                         .padding(end = 10.dp)
                         .size(30.dp, 30.dp))
-                    Text(text = "Puntuacion Media: 0",fontFamily = FontFamily.Serif, color = Color.White)
+                    Text(text = "Puntuacion Media: ${UserVM.puntuacionmedia}",fontFamily = FontFamily.Serif, color = Color.White)
                 }
             }
             Row(
@@ -108,10 +101,13 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Icon delete", tint = Color.Red, modifier = Modifier
                         .padding(top = 20.dp)
                         .size(30.dp, 30.dp)
-                        .clickable { UserVM.deleteAllShows()
+                        .clickable {
+                            UserVM.deleteAllShows()
                             UserVM.recuperarSeriesUsuario()
                             UserVM.obtenerListaUsuarios()
-                        navController.navigate(Routes.stadisticsRoute.route)}
+                            //UserVM.obtenerPuntuacionMedia()
+                            navController.navigate(Routes.stadisticsRoute.route)
+                        }
                     )
                 }
                 Column(modifier = Modifier

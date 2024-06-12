@@ -55,7 +55,7 @@ fun MostrarUsuario(usuario: User, onAcceptClick:() -> Unit, onDeleteclick:() -> 
                 Column(modifier = Modifier
                     .fillMaxWidth()
                     .height(130.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Text(text = usuario.nombre.toString(), textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold, fontSize = 13.5.sp, fontFamily = FontFamily.Serif, color = Color.Black)
+                    Text(text = usuario.nombre.toString(), textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold, fontSize = 13.5.sp, fontFamily = FontFamily.Serif, color = Color.Black, modifier = Modifier.padding(end = 5.dp, start = 5.dp))
                     Image(painter = ReturnProfile(imageString = usuario.image.toString()), contentDescription = "Foto Usuario", Modifier.padding(20.dp).size(60.dp,60.dp).clip(RoundedCornerShape(30.dp)))
                 }
                 Spacer(modifier = Modifier

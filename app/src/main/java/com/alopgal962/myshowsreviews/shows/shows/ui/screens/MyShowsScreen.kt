@@ -50,8 +50,10 @@ fun MyShowsScreen(uservm:UserVM,genericAndApiVM: GenericAndApiVM, navController:
             .fillMaxSize()
             .background(color = Color(232, 239, 236)), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Mis Series", color = Color.Black, fontStyle = FontStyle.Normal, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 20.dp))
-            Column(modifier = Modifier.padding(top = 20.dp, end = 20.dp, start = 20.dp, bottom = 30.dp).fillMaxSize()) {
-                if (user.listaSeries != null) {
+            if (user.listaSeries!!.count()>=1){
+                Column(modifier = Modifier
+                    .padding(top = 20.dp, end = 20.dp, start = 20.dp, bottom = 30.dp)
+                    .fillMaxSize()) {
                     LazyVerticalGrid(modifier = Modifier
                         .size(600.dp,620.dp),
                         verticalArrangement = Arrangement.spacedBy(35.dp),
@@ -61,8 +63,10 @@ fun MyShowsScreen(uservm:UserVM,genericAndApiVM: GenericAndApiVM, navController:
                         }
                     }
                 }
-                else{
-                    Text(text = "No tienes ninguna serie aun...")
+            }
+            else{
+                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    Text(text = "No tienes ninguna serie aun...",color = Color.Black, fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
                 }
             }
         }

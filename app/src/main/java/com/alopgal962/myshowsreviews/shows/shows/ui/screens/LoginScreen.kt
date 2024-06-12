@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -77,16 +78,19 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
                 value = userVM.emaiLRegisterLogin,
                 onValueChange = {userVM.emaiLRegisterLogin=it},
                 label = { Text(text = "Introduce tu email",color = Color(35, 54, 71)) },
-                modifier = Modifier.padding(top = 35.dp),
+                singleLine = true,
+                maxLines = 1,
+                modifier = Modifier.padding(top = 35.dp).width(275.dp),
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color(232, 239, 236), textColor = Color(35, 54, 71))
             )
             TextField(
                 value = userVM.passwordRegisterLogin,
                 onValueChange = {userVM.passwordRegisterLogin=it},
                 visualTransformation = PasswordVisualTransformation(),
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 label = { Text(text = "Introduce tu contraseña", color = Color(35, 54, 71)) },
-                modifier = Modifier.padding(top = 35.dp),
+                modifier = Modifier.padding(top = 35.dp).width(275.dp),
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color(232, 239, 236), textColor = Color(35, 54, 71))
 
             )
@@ -102,9 +106,9 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
                     .padding(top = 40.dp)
                     .size(width = 190.dp, height = 50.dp)
             ) {
-                Text(text = "Iniciar Sesion", fontSize = 16.sp)
+                Text(text = "Iniciar Sesion", color = Color.White, fontSize = 16.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
             }
-            Text(text = "⚫ No tengo cuenta", color = Color.White, modifier = Modifier
+            Text(text = "⚫ No tengo cuenta", color = Color.White, fontFamily = FontFamily.Serif, modifier = Modifier
                 .padding(end = 100.dp, top = 40.dp)
                 .clickable {
                     navController.navigate(Routes.registerRoute.route)

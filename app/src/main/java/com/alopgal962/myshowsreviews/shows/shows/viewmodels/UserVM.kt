@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alopgal962.myshowsreviews.shows.shows.data.model.RestrictedUser
 import com.alopgal962.myshowsreviews.shows.shows.data.model.User
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.google.firebase.Firebase
@@ -19,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.UUID
 
 @SuppressLint("MutableCollectionMutableState")
 class UserVM : ViewModel() {
@@ -30,9 +28,17 @@ class UserVM : ViewModel() {
     //Usuario a mostrar en la UI
     var user = _user.asStateFlow()
 
+    //Guarda el valor del show que se va a insertar
     private var _showInsertar = MutableStateFlow(ShowState())
 
+    //Valor que se utilizará en la UI
     var showInsertar = _showInsertar.asStateFlow()
+
+    //Guarda el valor del show que se quiere ver en la pantalla
+    private var _showEstadisticas = MutableStateFlow(ShowState())
+
+    //Show de estadisticas en la UI
+    var showEstadisticas = _showEstadisticas.asStateFlow()
 
     //Campos Inserccion y usuario
     var imagenRegister by mutableStateOf("")
@@ -41,15 +47,19 @@ class UserVM : ViewModel() {
     var passwordRegisterLogin by mutableStateOf("")
 
     //Campos de usuario
-    var listaAmigos: MutableList<RestrictedUser> = mutableListOf()
-    var listaPeticiones: MutableList<RestrictedUser> = mutableListOf()
     var listaSeries: MutableList<ShowState> = mutableListOf()
 
     var listanombres = mutableListOf<String>()
 
+    //Valor que guarda el valor de reseña
     var resena by mutableStateOf("")
+    //Valor que guarda el valor de la puntuacion
     var puntuacion by mutableStateOf("")
 
+    //Valor que guarda la puntuacion media
+    var puntuacionmedia by mutableStateOf("")
+
+    //Lista de usuarios
     var listaUsuarios by mutableStateOf(mutableListOf<User>())
 
     //Firebase autenticacion
@@ -62,7 +72,7 @@ class UserVM : ViewModel() {
         viewModelScope.launch {
             try {
                 obtenerNombres()
-                if (imagenRegister != "" && nombreRegister != "" && emaiLRegisterLogin != "" && passwordRegisterLogin.length >= 6 && listanombres.contains("adrian")) {
+                if (imagenRegister != "" && nombreRegister != "" && emaiLRegisterLogin != "" && passwordRegisterLogin.length >= 6 && !listanombres.contains(nombreRegister)) {
                     VMFireAuth.createUserWithEmailAndPassword(
                         emaiLRegisterLogin,
                         passwordRegisterLogin
@@ -74,8 +84,6 @@ class UserVM : ViewModel() {
                                     "nombre" to nombreRegister,
                                     "email" to emaiLRegisterLogin,
                                     "password" to passwordRegisterLogin,
-                                    "listaAmigos" to listaAmigos,
-                                    "listaPeticiones" to listaPeticiones,
                                     "listaSeries" to listaSeries,
                                 )
                             ).addOnCompleteListener {
@@ -154,7 +162,7 @@ class UserVM : ViewModel() {
     }
 
 
-    fun añadirSerieDB(navegacion: () -> Unit) {
+    fun anadirSerieDB(navegacion: () -> Unit) {
         viewModelScope.launch {
             try {
                 if (resena != "" && puntuacion.toInt() > 0 && puntuacion.toInt() <= 10) {
@@ -186,6 +194,17 @@ class UserVM : ViewModel() {
         }
     }
 
+    fun seeFullyShowDetails(show:ShowState){
+        viewModelScope.launch {
+            try {
+                _showEstadisticas.value = show
+            }
+            catch (e:Exception){
+                Log.d("ERROR-ESTADISICAS-SERIE","Excepcion al")
+            }
+        }
+    }
+
 
     fun checkShowRate(show: ShowState): String {
         var puntuacion = ""
@@ -206,6 +225,14 @@ class UserVM : ViewModel() {
     fun ResetSerieValues() {
         resena = ""
         puntuacion = ""
+    }
+
+    fun setShortResena(resena:String):String{
+        var resenaModified=resena
+        if (resena.length>40){
+            resenaModified = resena.substring(0,40) + "..."
+        }
+        return resenaModified
     }
 
     fun recuperarSeriesUsuario() {
@@ -308,4 +335,5 @@ class UserVM : ViewModel() {
             }
         }
     }
+
 }

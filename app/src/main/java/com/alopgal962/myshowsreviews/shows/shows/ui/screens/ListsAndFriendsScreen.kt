@@ -48,7 +48,6 @@ import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscoverPeople(GenericVM:GenericAndApiVM, UserVM:UserVM, navController: NavController){
-    val user by UserVM.user.collectAsState()
     Scaffold (topBar = { Topbar()}, bottomBar = { BottomBar(
         onCasaClick = { navController.navigate(Routes.mainRoute.route)},
         onSeriesClick = { navController.navigate(Routes.myshowsroute.route) },
@@ -64,8 +63,8 @@ fun DiscoverPeople(GenericVM:GenericAndApiVM, UserVM:UserVM, navController: NavC
                 Row(modifier = Modifier
                     .padding(end = 10.dp, start = 10.dp)
                     .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                    Text(text = "Reorganizar lista", fontSize = 16.sp, color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
-                    Icon(imageVector = Icons.Default.Refresh, contentDescription = "", modifier = Modifier.clickable {
+                    Text(text = "Descubrir Personas", fontSize = 16.sp, color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
+                    Icon(imageVector = Icons.Default.Refresh, contentDescription = "", modifier = Modifier.padding(start = 30.dp).clickable {
                         navController.navigate(Routes.addfriendsRoute.route)
                         UserVM.obtenerListaUsuarios()
                     } )

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -28,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -65,6 +67,12 @@ fun MainScreen(
                 .background(color = Color(232, 239, 236)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Row(modifier = Modifier
+                .size(270.dp, 30.dp)
+                .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp))
+                .background(color = Color(35, 54, 71)), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                Text(text = "Bienvenido, ${user.nombre}", color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 13.sp, fontFamily = FontFamily.Serif)
+            }
             Row(
                 modifier = Modifier
                     .padding(20.dp)
@@ -133,12 +141,18 @@ fun MainScreen(
                     }
                 }
             } else {
-                CircularProgressIndicator(
-                    color = Color.Black,
-                    modifier = Modifier.padding(top = 60.dp)
-                )
-                Text(text = "Cargando...", color = Color.Black)
-            }
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    CircularProgressIndicator(
+                        color = Color.Black,
+                        modifier = Modifier
+                            .padding(top = 60.dp)
+                            .size(100.dp, 100.dp)
+                    )
+                    Text(text = "Cargando...", fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 30.dp))
+                }
+                }
         }
         }
     }

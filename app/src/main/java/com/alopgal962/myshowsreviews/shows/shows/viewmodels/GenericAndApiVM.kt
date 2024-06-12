@@ -51,9 +51,7 @@ class GenericAndApiVM:ViewModel() {
         obtenerPeliculas(numpage)
     }
 
-    /*
-        Llama a la funcion GetShows de el repositorio, y almacena los resultados en la lista _listashow.
-     */
+    /*Llama a la funcion GetShows de el repositorio, y almacena los resultados en la lista _listashow.*/
 
     fun obtenerPeliculas(numpagina:Int) {
         try {
