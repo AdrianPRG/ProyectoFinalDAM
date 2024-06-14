@@ -23,6 +23,7 @@ import com.alopgal962.myshowsreviews.shows.shows.ui.screens.MainScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.MyFullShowScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.MyShowsScreen
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.RegisterScreen
+import com.alopgal962.myshowsreviews.shows.shows.ui.screens.ScreenSerieUsuario
 import com.alopgal962.myshowsreviews.shows.shows.ui.screens.ShowExplained
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.GenericAndApiVM
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
@@ -35,22 +36,25 @@ class MainActivity : ComponentActivity() {
             MyShowsReviewsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    val UserVM: UserVM by viewModels()
+                    val uservm: UserVM by viewModels()
                     val navController = rememberNavController()
-                    val GenericAndApiVM: GenericAndApiVM by viewModels()
+                    val genericandapivm: GenericAndApiVM by viewModels()
                     NavHost(navController = navController, startDestination = Routes.loginRoute.route ){
-                        composable(Routes.registerRoute.route){ RegisterScreen(userVM = UserVM, navController) }
-                        composable(Routes.mainRoute.route) { MainScreen(UserVM = UserVM, GenericAndApiVM = GenericAndApiVM ,navController = navController) }
-                        composable(Routes.loginRoute.route) { LoginScreen(userVM = UserVM, genericAndApiVM = GenericAndApiVM(), navController = navController) }
-                        composable(Routes.stadisticsRoute.route) { StatisticsScreen( UserVM = UserVM, GenericAndApiVM = GenericAndApiVM, navController = navController ) }
-                        composable(Routes.addfriendsRoute.route) { DiscoverPeople(GenericVM = GenericAndApiVM, uservm =UserVM , navController = navController)  }
-                        composable(Routes.myshowsroute.route){ MyShowsScreen(uservm = UserVM, genericAndApiVM =GenericAndApiVM , navController = navController) }
+                        composable(Routes.registerRoute.route){ RegisterScreen(userVM = uservm, navController) }
+                        composable(Routes.mainRoute.route) { MainScreen(UserVM = uservm, GenericAndApiVM = genericandapivm ,navController = navController) }
+                        composable(Routes.loginRoute.route) { LoginScreen(userVM = uservm, genericAndApiVM = GenericAndApiVM(), navController = navController) }
+                        composable(Routes.stadisticsRoute.route) { StatisticsScreen( UserVM = uservm, GenericAndApiVM = genericandapivm, navController = navController ) }
+                        composable(Routes.addfriendsRoute.route) { DiscoverPeople(GenericVM = genericandapivm, uservm =uservm , navController = navController)  }
+                        composable(Routes.myshowsroute.route){ MyShowsScreen(uservm = uservm, genericAndApiVM =genericandapivm , navController = navController) }
                         composable("ShowExplained/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
-                            ShowExplained(GenericAndApiVM = GenericAndApiVM,navController = navController) }
+                            ShowExplained(GenericAndApiVM = genericandapivm,navController = navController) }
                         composable("AddShow/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
-                            AddShow(userVM = UserVM,navController = navController) }
+                            AddShow(userVM = uservm,navController = navController) }
                         composable("MyShowExplained/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})){
-                            MyFullShowScreen(userVM = UserVM, navController =  navController)
+                            MyFullShowScreen(userVM = uservm, navController =  navController)
+                        }
+                        composable ("UserShowExplained/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})){
+                            ScreenSerieUsuario(userVM = uservm, navController = navController )
                         }
                     }
                 }

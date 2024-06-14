@@ -88,7 +88,10 @@ fun MostrarUsuario(usuario: User,userVM: UserVM,navController: NavController){
                 }
                 else{
                     items(usuario.listaSeries!!){
-                        MostrarShowUsuario(show = it,{})
+                        MostrarShowUsuario(show = it,{
+                            navController.navigate("UserShowExplained/${usuario.nombre}_${it.titulo}")
+                            userVM.setUser(usuario,it)
+                        })
                     }
                 }
             }
@@ -126,7 +129,8 @@ fun MostrarShowUsuario(show: ShowState,navegacion:() -> Unit){
                     .size(30.dp, 30.dp))
                 Text(text = "Click para ver reseña", modifier = Modifier
                     .padding(end = 10.dp, start = 5.dp)
-                    .clickable { navegacion() }, fontSize = 13.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, color = Color.White )
+                    .clickable {
+                        navegacion() }, fontSize = 13.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, color = Color.White )
             }
         }
     }

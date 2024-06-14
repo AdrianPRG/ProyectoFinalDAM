@@ -94,6 +94,41 @@ class UserVM : ViewModel() {
 
     var VMFireDB = Firebase.firestore
 
+    private var _usuarioSerie = MutableStateFlow(User())
+
+    var usuarioSerie = _usuarioSerie.asStateFlow()
+
+    private var _serieUsuario = MutableStateFlow(ShowState())
+
+    var serieUsuario = _serieUsuario.asStateFlow()
+
+
+    /**
+     * Recibe un usuario y un show y pone su valor en las variables de usuarioSerie y serieUsuario
+     * @param user usuario que se pasa por parametros para que se asigne el usuario y la serie sobre la que hemos pinchado
+     * @param show es el show que se guardará en la variable _serieUsuario
+     */
+    fun setUser(user: User,show: ShowState){
+        viewModelScope.launch {
+            try {
+                _usuarioSerie.value = user
+                _serieUsuario.value = show
+            }
+            catch (e:Exception){
+                Log.d("ERROR-asignando-user","Error al asignar user y serie")
+            }
+        }
+    }
+
+    /**
+     *
+     */
+
+    fun OnExitUserSerie(navegacion: () -> Unit){
+        _usuarioSerie.value = User()
+        _serieUsuario.value = ShowState()
+        navegacion()
+    }
 
     /**
      * Se ejecuta en corrutina y dentro de un bloque try-catch
