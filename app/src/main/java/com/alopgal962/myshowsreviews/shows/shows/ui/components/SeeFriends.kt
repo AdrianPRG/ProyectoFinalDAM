@@ -118,7 +118,7 @@ fun MostrarShowUsuario(show: ShowState,navegacion:() -> Unit){
                 Icon(imageVector = Icons.Default.Star, contentDescription = "", tint = Color.Yellow, modifier = Modifier
                     .padding(end = 5.dp)
                     .size(30.dp, 30.dp))
-                Text(text = "Puntuacion de amigo: " + show.mipuntuacion, modifier = Modifier.padding(start = 5.dp),fontSize = 13.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, color = Color.White)
+                Text(text = "Puntuacion de amigo: " + show.mipuntuacion, modifier = Modifier.padding(start = 5.dp),fontSize = 12.5.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, color = Color.White)
             }
             Row(modifier = Modifier
                 .padding(top = 5.dp, start = 5.dp, end = 5.dp)

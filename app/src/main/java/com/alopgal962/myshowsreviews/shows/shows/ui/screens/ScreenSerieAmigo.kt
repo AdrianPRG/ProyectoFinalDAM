@@ -61,14 +61,14 @@ fun ScreenSerieUsuario(userVM: UserVM,navController: NavController){
                 .background(color = Color(232, 239, 236))) {
            Column(modifier = Modifier
                .fillMaxWidth()
-               .height(120.dp)
+               .height(90.dp)
                .border(2.dp, color = Color.Black), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
               Text(text = "Show de usuario", color = Color.Black, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif)
-              Text(text = show.titulo.toString(), color = Color.Black, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, modifier = Modifier.padding(10.dp), textAlign = TextAlign.Center, fontSize = 13.sp)
+              Text(text = show.titulo.toString(), color = Color.Black, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, modifier = Modifier.padding(10.dp), textAlign = TextAlign.Center, fontSize = 15.sp)
            }
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)) {
+                .height(320.dp)) {
                 Column(modifier = Modifier
                     .fillMaxHeight()
                     .width(200.dp)
@@ -78,7 +78,7 @@ fun ScreenSerieUsuario(userVM: UserVM,navController: NavController){
                 Column(modifier = Modifier
                     .fillMaxSize()
                     .border(2.dp, color = Color.Black), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = user.nombre.toString(), color = Color.Black, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 5.dp))
+                    Text(text = user.nombre.toString(), color = Color.Black, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 7.dp))
                     Image(painter = ReturnProfile(imageString = user.image.toString()), contentDescription = "Imagen de usuario", modifier = Modifier
                         .padding(top = 10.dp)
                         .size(80.dp, 80.dp)
