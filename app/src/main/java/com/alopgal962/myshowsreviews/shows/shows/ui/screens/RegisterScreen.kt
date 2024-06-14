@@ -24,13 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -41,6 +41,8 @@ import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(userVM: UserVM, navController: NavController) {
+    //Pantalla principal
+    var context = LocalContext.current.applicationContext
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -80,6 +82,7 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                 .fillMaxWidth()
                 .height(140.dp)
         ) {
+            //Imagen de perfil 1
             Image(
                 painter = painterResource(id = R.drawable.perfil1),
                 contentDescription = "photo1",
@@ -89,6 +92,7 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                     .clip(RoundedCornerShape(40))
                     .clickable { userVM.imagenRegister = "perfil1" }
             )
+            //Imagen de perfil 2
             Image(
                 painter = painterResource(id = R.drawable.perfil2),
                 contentDescription = "photo2",
@@ -98,6 +102,7 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                     .clip(RoundedCornerShape(40))
                     .clickable { userVM.imagenRegister = "perfil2" }
             )
+            //Imagen de perfil 3
             Image(
                 painter = painterResource(id = R.drawable.perfil3),
                 contentDescription = "photo3",
@@ -109,7 +114,6 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
         }
         //Columna que contiene las rows de cada textField
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-            //TextField 1 e Imagen
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
@@ -124,16 +128,11 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                         .size(65.dp)
                         .padding(end = 10.dp)
                 )
+                //TextField de nombre de usuario
                 TextField(
                     value = userVM.nombreRegister,
                     singleLine = true,
-                    onValueChange = { if (userVM.nombreRegister.length<=10){
-
-                        userVM.nombreRegister = it }
-                        else{
-                            userVM.nombreRegister = ""
-                    }
-                                                                           },
+                    onValueChange = {userVM.nombreRegister = it},
                     label = { Text(text = "Nombre de usuario", color = Color.White) },
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
@@ -150,7 +149,6 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                         .size(260.dp, 60.dp)
                 )
             }
-            //TextField 2 e Imagen
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
@@ -164,6 +162,7 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                         .size(65.dp)
                         .padding(end = 10.dp)
                 )
+                //TextField de correo electronico
                 TextField(
                     value = userVM.emaiLRegisterLogin,
                     onValueChange = { userVM.emaiLRegisterLogin = it },
@@ -184,7 +183,6 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                         .size(260.dp, 60.dp)
                 )
             }
-            //TextField 3 e Imagen
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
@@ -198,6 +196,7 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                         .size(65.dp)
                         .padding(end = 10.dp)
                 )
+                //TextField de contraseña
                 TextField(
                     value = userVM.passwordRegisterLogin,
                     onValueChange = { userVM.passwordRegisterLogin = it },
@@ -228,10 +227,11 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                     .height(120.dp)
 
             ) {
+                //Boton de registro en el que se obtienen los nombres y se registra en la base de datos
                 Button(
                     onClick = {
                         userVM.obtenerNombres()
-                        userVM.registrarme { navController.navigate(Routes.loginRoute.route) } },
+                        userVM.registrarme ( { navController.navigate(Routes.loginRoute.route) }, context) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),
                     modifier = Modifier
                         .padding(end = 40.dp)
@@ -240,20 +240,22 @@ fun RegisterScreen(userVM: UserVM, navController: NavController) {
                     Text(text = "Registrarme", color = Color.White, fontSize = 12.5.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif)
                 }
                 Button(
-                    onClick = { userVM.borrarCampos() },
+                    onClick = { userVM.borrarCamposRegistroLogin() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(210, 120, 120)),
                     modifier = Modifier.size(width = 130.dp, height = 50.dp)
                 ) {
                     Text(text = "Borrar", color = Color.White,fontWeight = FontWeight.Black, fontFamily = FontFamily.Serif)
                 }
             }
+            //Si ya tiene una cuenta, se navega a la pantalla de inicio de sesion
+            //Se borran los campos de registro
             Text(
                 text = "⚫ Ya tengo una cuenta",
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
                 modifier = Modifier.padding(end = 120.dp, bottom = 30.dp).clickable {
                     navController.navigate(Routes.loginRoute.route)
-                    userVM.borrarCampos()
+                    userVM.borrarCamposRegistroLogin()
                 })
         }
     }

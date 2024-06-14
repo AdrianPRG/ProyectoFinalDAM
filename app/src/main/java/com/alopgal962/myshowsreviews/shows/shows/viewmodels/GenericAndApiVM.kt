@@ -20,38 +20,36 @@ import kotlin.random.Random
  * @property listashow Es la lista que se mostrará en la UI. Almacena los datos de _listashow
  * @property _show Es el show en el que se almacenará el show cuando pulsemos para ver informacion sobre el.
  * @property show Es el show que se mostrará en la UI. Almacena el valor de _show
+ * @property disabled Booleano que actuará para que el boton de avanzar y retroceder se deshabilite por segundos
  */
 class GenericAndApiVM:ViewModel() {
 
 
-    //Numero de pagina que ira incrementandose
-    var numpage = (1..499).random()
+    var numpage = getNumpageRandom()
 
-    //Instanciamos el repositorio, donde tenemos almacenadas las funciones de conversion y recuperacion de datos
     val ShowsRepository = ShowRepository()
 
-    //Declaramos la variable _listashow que sera privada
-    //en esta haremos los cambios, es un estado y se va viendo constantemente
     var _listaShow = MutableStateFlow<List<ShowState>>(emptyList())
 
-    //La lista publica que mostraremos
     val listashow = _listaShow.asStateFlow()
 
-    //Show que se guardará el show cuando se haga click encima de boton informacion del correspondiente
     private var _show = MutableStateFlow(ShowState())
 
-    //Variable que almacena false, para que ponga el boton de refresh deshabilitado durnte 5 segundos
-    var disabled = MutableStateFlow(true)
-
-    //Show que se mostrará
     val show = _show.asStateFlow()
 
-    //Inicializamos la funciond de obtener peliculas
+    var disabled = MutableStateFlow(true)
+
+
+    //Inicializamos la funcion de obtener peliculas
     init {
         obtenerPeliculas(numpage)
     }
 
-    /*Llama a la funcion GetShows de el repositorio, y almacena los resultados en la lista _listashow.*/
+    /**
+     * Llama a la funcion GetShows de el repositorio, y almacena los resultados en la lista _listashow.
+     * Esta lista se mostrará en la UI
+     * @param numpagina es el numero de pagina de busqueda en la api, ya que hay varias paginas con resultados
+     * */
 
     fun obtenerPeliculas(numpagina:Int) {
         try {
@@ -64,7 +62,8 @@ class GenericAndApiVM:ViewModel() {
     }
 
     /**
-     * @param nombre es el nombre que se le pasará a la funcion GetInfoShow, para que busque en la base de datos la pelicula que contenga ese nombre
+     * Funcion que recibe un nombre y busca en la lista de shows el nombre pasado por parametros
+     * @param nombre es el nombre que se pasará para que busque en la lista la pelicula que contenga ese nombre
      */
 
     fun obtenerPelicula(nombre: String) {
@@ -77,12 +76,12 @@ class GenericAndApiVM:ViewModel() {
         }
     }
 
-    fun refresh(){
-        numpage = (1..499).random()
-    }
 
-    /*
-       La funcion refresh avanza o retrocede en las paginas
+    /**
+     * La funcion refresh avanza o retrocede en las paginas
+     * Una vez se ha sumado o restado el numero de pagina, se llama de nuevo a la funcion de obtener shows, ademas de que la propiedad
+     * disabled cambia de estado durante 2 segundos, para inhabilitar el boton de avanzar o retroceder
+     * @param go es booleano que, si es true, avanzará el numero de pagina, si no, retrocede
      */
     fun refresh(go: Boolean) {
         viewModelScope.launch {
@@ -107,5 +106,14 @@ class GenericAndApiVM:ViewModel() {
             delay(2000)
             disabled.value = true
         }
+    }
+
+    /**
+     * Devuelve un numero random que se asignará a la pagina
+     * @return numero random
+     */
+    fun getNumpageRandom():Int{
+         val num = (1..499).random()
+        return num
     }
 }

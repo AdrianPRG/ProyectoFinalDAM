@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -42,11 +43,14 @@ import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController: NavController) {
+    var context = LocalContext.current.applicationContext
+    //Pantalla que ocupa todo el tamaño
     Column(
         Modifier
             .fillMaxSize()
             .background(color = Color(35, 54, 71))
     ) {
+        //Columna con texto de inicio de sesion
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -74,6 +78,7 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
                 painter = painterResource(id = R.drawable.user_signin),
                 contentDescription = "Imagen Sign in"
             )
+            //Textfield para el campo de el email
             TextField(
                 value = userVM.emaiLRegisterLogin,
                 onValueChange = {userVM.emaiLRegisterLogin=it},
@@ -83,6 +88,7 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
                 modifier = Modifier.padding(top = 35.dp).width(275.dp),
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color(232, 239, 236), textColor = Color(35, 54, 71))
             )
+            //Textfield para el campo de la contraseña
             TextField(
                 value = userVM.passwordRegisterLogin,
                 onValueChange = {userVM.passwordRegisterLogin=it},
@@ -94,9 +100,11 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color(232, 239, 236), textColor = Color(35, 54, 71))
 
             )
+            //Boton que al pulsar inicia sesion, navega hacia la pantalla principal.
+            //Obtiene las peliculas, recupera las serie del usuario actual si es que tiene, y obtiene la lista de todos los usuarios
+            //Por asi decirlo, inicializa el contenido de muchas pantallas
             Button(
-                onClick = { userVM.iniciarsesion { navController.navigate(Routes.mainRoute.route) }
-                    genericAndApiVM.refresh()
+                onClick = { userVM.iniciarsesion({navController.navigate(Routes.mainRoute.route) },context)
                     genericAndApiVM.obtenerPeliculas(genericAndApiVM.numpage)
                     userVM.recuperarSeriesUsuario()
                     userVM.obtenerListaUsuarios()
@@ -108,11 +116,13 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
             ) {
                 Text(text = "Iniciar Sesion", color = Color.White, fontSize = 16.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
             }
+            //Si no tiene cuenta, al pulsar sobre el texto se navegará a la pantalla de registro.
+            //Se borran los campos de login
             Text(text = "⚫ No tengo cuenta", color = Color.White, fontFamily = FontFamily.Serif, modifier = Modifier
                 .padding(end = 100.dp, top = 40.dp)
                 .clickable {
                     navController.navigate(Routes.registerRoute.route)
-                    userVM.borrarCampos()
+                    userVM.borrarCamposRegistroLogin()
                 })
         }
     }

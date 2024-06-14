@@ -36,7 +36,7 @@ fun MostrarShow(Show:ShowState, oninfoclick:() -> Unit, onanadirclick:() -> Unit
         .clip(RoundedCornerShape(20.dp))
         .background(color = Color(35, 54, 71)),horizontalAlignment = Alignment.CenterHorizontally){
         Column(Modifier.size(270.dp,190.dp)) {
-            AsyncImage(model = "https://image.tmdb.org/t/p/w500${Show.imagen}", contentDescription = "${Show.titulo} / imagen", contentScale = ContentScale.Crop,
+            AsyncImage(model = "https://image.tmdb.org/t/p/w500${Show.imagen}", contentDescription = "${Show.titulo} / imagen", contentScale = ContentScale.FillBounds,
                modifier =  Modifier
                     .fillMaxSize())
         }

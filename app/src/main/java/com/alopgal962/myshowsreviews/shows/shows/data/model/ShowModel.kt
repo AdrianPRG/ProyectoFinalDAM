@@ -12,7 +12,7 @@ data class ShowModel(
     @SerializedName("release_date")
     var fechasalida:String="",
     @SerializedName("vote_average")
-    var puntuacion:String,
+    var puntuacion:String="",
     @SerializedName("vote_count")
     var votos:String
 )

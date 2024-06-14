@@ -43,11 +43,8 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.mainRoute.route) { MainScreen(UserVM = UserVM, GenericAndApiVM = GenericAndApiVM ,navController = navController) }
                         composable(Routes.loginRoute.route) { LoginScreen(userVM = UserVM, genericAndApiVM = GenericAndApiVM(), navController = navController) }
                         composable(Routes.stadisticsRoute.route) { StatisticsScreen( UserVM = UserVM, GenericAndApiVM = GenericAndApiVM, navController = navController ) }
-                        composable(Routes.addfriendsRoute.route) { DiscoverPeople(
-                            GenericVM = GenericAndApiVM,
-                            UserVM =UserVM ,
-                            navController = navController
-                        )  }
+                        composable(Routes.addfriendsRoute.route) { DiscoverPeople(GenericVM = GenericAndApiVM, uservm =UserVM , navController = navController)  }
+                        composable(Routes.myshowsroute.route){ MyShowsScreen(uservm = UserVM, genericAndApiVM =GenericAndApiVM , navController = navController) }
                         composable("ShowExplained/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
                             ShowExplained(GenericAndApiVM = GenericAndApiVM,navController = navController) }
                         composable("AddShow/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})) {
@@ -55,11 +52,6 @@ class MainActivity : ComponentActivity() {
                         composable("MyShowExplained/{name}", arguments = listOf(navArgument("name"){type = NavType.StringType})){
                             MyFullShowScreen(userVM = UserVM, navController =  navController)
                         }
-                        composable(Routes.myshowsroute.route){ MyShowsScreen(
-                            uservm = UserVM,
-                            genericAndApiVM =GenericAndApiVM ,
-                            navController = navController
-                        ) }
                     }
                 }
             }

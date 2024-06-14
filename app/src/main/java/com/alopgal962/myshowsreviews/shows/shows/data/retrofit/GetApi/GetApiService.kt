@@ -13,7 +13,7 @@ import retrofit2.http.Query
 
 interface GetApiService {
 
-    //
+    //Obtiene las peliculas por medio de la anotacion Get y la constantes de URL y la key de api
     @GET(peliculas + key)
     suspend fun getPeliculas(@Query("page")pagenum:Int): Response<ShowsModel>
 

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -70,23 +71,23 @@ fun MyShow(show:ShowState,userVM: UserVM,navController: NavController){
                 Icon(imageVector = Icons.Default.Star, contentDescription = "StarUsers" , tint = Color.White, modifier = Modifier
                     .padding(end = 10.dp, bottom = 5.dp)
                     .size(30.dp, 30.dp))
-                Text(text = "Puntuaje medio: " + show.puntuacion?.substring(0,3),color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = "Puntuaje medio: " + show.puntuacion?.toString()?.substring(0,3),color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
             }
             Row(modifier = Modifier
-                .padding(start = 10.dp, top = 5.dp)
-                .size(230.dp, 60.dp)) {
-                Icon(imageVector = Icons.Default.Info, contentDescription = "Reseña" , tint = Color.White, modifier = Modifier
+                .padding(start = 10.dp)
+                .size(230.dp, 60.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(imageVector = Icons.Default.Person, contentDescription = "Reseña" , tint = Color.White, modifier = Modifier
                     .padding(end = 5.dp, bottom = 5.dp)
                     .size(30.dp, 30.dp))
-                Text(text = userVM.setShortResena(show.miresena.toString()),color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(end = 10.dp, start = 5.dp, bottom = 10.dp))
+                Text(text = "Click en detalles para ver reseña...",color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(end = 10.dp, start = 5.dp, bottom = 10.dp))
             }
             Row(modifier = Modifier
-                .padding(start = 5.dp, top = 5.dp)
-                .size(230.dp, 40.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                Column(modifier = Modifier.fillMaxHeight().width(100.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Text(text = "Eliminar", color = Color.White, fontFamily = FontFamily.Serif, modifier = Modifier.padding(bottom =  5.dp), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                .width(230.dp).fillMaxHeight(), verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.fillMaxHeight().width(115.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    Text(text = "Eliminar", color = Color.White, fontFamily = FontFamily.Serif, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Icono de eliminar show", tint = Color.Red, modifier = Modifier
-                        .size(20.dp, 20.dp)
+                        .padding(top = 10.dp)
+                        .size(30.dp, 30.dp)
                         .clickable {
                             userVM.deletePelicula(show)
                             userVM.recuperarSeriesUsuario()
@@ -94,10 +95,11 @@ fun MyShow(show:ShowState,userVM: UserVM,navController: NavController){
                             navController.navigate(Routes.myshowsroute.route)
                         })
                 }
-                Column(modifier = Modifier.fillMaxHeight().width(100.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Text(text = "Detalles", color = Color.White, fontFamily = FontFamily.Serif, modifier = Modifier.padding(bottom = 10.dp), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                Column(modifier = Modifier.padding(end = 10.dp).fillMaxHeight().width(115.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    Text(text = "Detalles", color = Color.White, fontFamily = FontFamily.Serif, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Icono de ver show", tint = Color.White, modifier = Modifier
-                        .size(20.dp, 20.dp)
+                        .padding(top = 10.dp)
+                        .size(30.dp, 30.dp)
                         .clickable {
                             userVM.seeFullyShowDetails(show)
                             navController.navigate("MyShowExplained/${show.titulo}")

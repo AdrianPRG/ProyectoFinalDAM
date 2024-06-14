@@ -89,7 +89,7 @@ fun ShowExplained(GenericAndApiVM:GenericAndApiVM, navController: NavController)
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Star Rate", tint = Color.Yellow, modifier = Modifier
                         .padding(end = 10.dp)
                         .size(30.dp, 30.dp))
-                    Text(text = "Puntuacion: ${show.puntuacion?.substring(0,3)}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text(text = "Puntuacion: ${show.puntuacion?.toString()?.substring(0,3)}", fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, color = Color.Black)
 
                 }
                 Row(modifier = Modifier

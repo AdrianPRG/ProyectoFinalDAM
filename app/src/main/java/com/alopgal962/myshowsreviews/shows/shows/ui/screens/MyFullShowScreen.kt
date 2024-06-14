@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,13 +47,13 @@ import coil.compose.AsyncImage
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.Topbar
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
-import okhttp3.Route
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyFullShowScreen(userVM: UserVM,navController: NavController){
     val show by userVM.showEstadisticas.collectAsState()
+    val desc by userVM.desc.collectAsState()
     Scaffold(topBar = { Topbar()}) {
         Column(modifier = Modifier
             .padding(top = 110.dp)
@@ -111,7 +112,7 @@ fun MyFullShowScreen(userVM: UserVM,navController: NavController){
                                         .fillMaxWidth()
                                         .height(40.dp), verticalAlignment = Alignment.CenterVertically) {
                                         Icon(imageVector = Icons.Default.DateRange, contentDescription = "Icono Fecha", tint = Color.Black, modifier = Modifier.size(30.dp,30.dp))
-                                        Text(text = "Votos: ${show.fechasalida} ", modifier = Modifier.padding(start = 10.dp), color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
+                                        Text(text = "Fecha: ${show.fechasalida} ", modifier = Modifier.padding(start = 10.dp), color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
                                     }
                                     Row(modifier = Modifier
                                         .padding(10.dp)
@@ -134,44 +135,58 @@ fun MyFullShowScreen(userVM: UserVM,navController: NavController){
                             }
                         }
                     }
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .border(2.dp, color = Color.Black)) {
-                        Column(modifier = Modifier
+                    if (desc){
+                        Row(modifier = Modifier
                             .fillMaxWidth()
-                            .height(140.dp)) {
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .border(2.dp, color = Color.Black), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                                Icon(imageVector = Icons.Default.Info, contentDescription = "Icono de descripcion", tint = Color.Black, modifier = Modifier.size(30.dp,30.dp))
-                                Text(text = "Descripcion", textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, color = Color.Black, fontSize = 15.sp, modifier = Modifier.padding(start = 15.dp, end = 10.dp))
-                            }
-                            LazyColumn(modifier = Modifier.padding(bottom = 10.dp).fillMaxSize()){
-                                item {
-                                    Text(text = show.descripcion.toString(), color = Color.Black, modifier = Modifier.padding(10.dp))
-                                }
+                            .height(35.dp)
+                            .border(2.dp, color = Color.Black), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                            Icon(imageVector = Icons.Default.Refresh, contentDescription = "Icono de descripcion", tint = Color.Black, modifier = Modifier
+                                .size(30.dp, 30.dp)
+                                .clickable { userVM.changeDescState() })
+                            Text(text = "Descripcion", textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, color = Color.Black, fontSize = 15.sp, modifier = Modifier.padding(start = 15.dp, end = 10.dp))
+                            Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Volver Atras", tint = Color.Black, modifier = Modifier
+                                .padding(start = 80.dp)
+                                .size(30.dp, 30.dp)
+                                .clickable {
+                                    userVM.onExitMyFullShowScreen(
+                                        { navController.navigate(Routes.myshowsroute.route) })
+                                })
+
+                        }
+                        LazyColumn(modifier = Modifier
+                            .padding(bottom = 40.dp)
+                            .fillMaxSize()
+                            .border(2.dp,Color.Black)){
+                            item {
+                                Text(text = show.descripcion.toString(), color = Color.Black, modifier = Modifier.padding(10.dp))
                             }
                         }
-                        Column(modifier = Modifier
+                    }
+                    else{
+                        Row(modifier = Modifier
                             .fillMaxWidth()
-                            .height(140.dp)) {
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .border(2.dp, color = Color.Black), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                                Icon(imageVector = Icons.Default.Person, contentDescription = "Icono de descripcion", tint = Color.Black, modifier = Modifier.size(30.dp,30.dp))
-                                Text(text = "Mi Reseña", textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, color = Color.Black, fontSize = 15.sp, modifier = Modifier.padding(start = 15.dp, end = 10.dp))
-                            }
-                            LazyColumn(modifier = Modifier.padding(bottom = 10.dp).fillMaxSize()){
-                                item {
-                                    Text(text = show.miresena.toString(), color = Color.Black, modifier = Modifier.padding(10.dp))
-                                }
+                            .height(35.dp)
+                            .border(2.dp, color = Color.Black), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                            Icon(imageVector = Icons.Default.Refresh, contentDescription = "Icono de descripcion", tint = Color.Black, modifier = Modifier
+                                .size(30.dp, 30.dp)
+                                .clickable { userVM.changeDescState() })
+                            Text(text = "Mi Reseña", textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, color = Color.Black, fontSize = 15.sp, modifier = Modifier.padding(start = 15.dp, end = 10.dp))
+                            Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Volver Atras", tint = Color.Black, modifier = Modifier
+                                .padding(start = 80.dp)
+                                .size(30.dp, 30.dp)
+                                .clickable { userVM.onExitMyFullShowScreen({navController.navigate(Routes.myshowsroute.route)}) })
+                        }
+                        LazyColumn(modifier = Modifier
+                            .padding(bottom = 40.dp)
+                            .fillMaxSize()
+                            .border(2.dp, color = Color.Black)){
+                            item {
+                                Text(text = show.miresena.toString(), color = Color.Black, modifier = Modifier.padding(10.dp))
                             }
                         }
+                    }
                     }
                 }
             }
         }
     }
-}
