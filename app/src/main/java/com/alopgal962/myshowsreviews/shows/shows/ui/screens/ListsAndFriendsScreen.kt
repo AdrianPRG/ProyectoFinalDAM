@@ -42,7 +42,7 @@ fun DiscoverPeople(GenericVM:GenericAndApiVM, uservm:UserVM, navController: NavC
     Scaffold (topBar = { Topbar()}, bottomBar = { BottomBar(
         onCasaClick = { navController.navigate(Routes.mainRoute.route)},
         onSeriesClick = { navController.navigate(Routes.myshowsroute.route) },
-        onAmigosClick = {navController.navigate(Routes.addfriendsRoute.route)},
+        onAmigosClick = {},
         onConfigClic = { navController.navigate(Routes.stadisticsRoute.route) })}) {
         Column(modifier = Modifier
             .padding(top = 110.dp, bottom = 100.dp)

@@ -105,8 +105,6 @@ fun LoginScreen(userVM: UserVM, genericAndApiVM: GenericAndApiVM, navController:
             //Por asi decirlo, inicializa el contenido de muchas pantallas
             Button(
                 onClick = { userVM.iniciarsesion({navController.navigate(Routes.mainRoute.route) },context)
-                    genericAndApiVM.obtenerPeliculas(genericAndApiVM.numpage)
-                    userVM.recuperarSeriesUsuario()
                     userVM.obtenerListaUsuarios()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(110, 149, 114)),

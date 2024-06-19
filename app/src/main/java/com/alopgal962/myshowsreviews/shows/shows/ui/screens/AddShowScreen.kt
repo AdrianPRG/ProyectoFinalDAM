@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +50,7 @@ import coil.compose.AsyncImage
 import com.alopgal962.myshowsreviews.R
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.Topbar
+import com.alopgal962.myshowsreviews.shows.shows.ui.components.estrellaCalificacion
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -56,6 +58,7 @@ import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 @Composable
 fun AddShow(userVM: UserVM,navController: NavController){
     val showInsertar by userVM.showInsertar.collectAsState()
+    val context = LocalContext.current.applicationContext
     Scaffold(topBar = { Topbar()}) {
         Column(modifier = Modifier
             .padding(top = 110.dp)
@@ -93,35 +96,32 @@ fun AddShow(userVM: UserVM,navController: NavController){
                         AsyncImage(model = "https://image.tmdb.org/t/p/w500${showInsertar.imagen}", contentDescription = "Descripcion", contentScale = ContentScale.FillBounds, modifier = Modifier.fillMaxSize())
                     }
                 }
+                Text(text = "Introduce tu calificacion", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif,color = Color.Black, modifier = Modifier.padding(top = 10.dp))
+                Text(text = userVM.puntuacion, fontSize = 15.sp, color = Color.Black, fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 10.dp, bottom = 7.dp))
                 Row(modifier = Modifier
                     .padding(start = 20.dp, end = 20.dp)
                     .fillMaxWidth()
-                    .height(100.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                    TextField(modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .width(275.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),placeholder = { Text("Puntuacion del 1 al 10", color = Color.White)},value = userVM.puntuacion, onValueChange = { if (userVM.puntuacion.length<2){ userVM.puntuacion = it}
-                                                                                                                                                                                                                                                                                       else{userVM.puntuacion=""}}, label = { Text(
-                        text = "Introduce tu puntuacion..", color = Color.White
-                    )}, leadingIcon = { Icon(imageVector = Icons.Default.Star, contentDescription = "", tint = Color.White)}, singleLine = true, maxLines = 1, colors = TextFieldDefaults.textFieldColors(containerColor = Color(35, 54, 71), textColor = Color.White))
+                    .height(80.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                    estrellaCalificacion(userVM)
                 }
                 Row(modifier = Modifier
                     .padding(start = 20.dp, end = 20.dp)
                     .fillMaxWidth()
-                    .height(100.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                    .height(80.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                     TextField(modifier = Modifier
                         .clip(RoundedCornerShape(20.dp))
-                        .width(275.dp), maxLines = 3,placeholder = { Text("Increible, me ha encantado", color = Color.White, textAlign = TextAlign.Center)},value = userVM.resena, onValueChange = { userVM.resena = it }, label = { Text(
+                        .width(275.dp), maxLines = 2,placeholder = { Text("Increible, me ha encantado", color = Color.White, textAlign = TextAlign.Center)},value = userVM.resena, onValueChange = { userVM.resena = it }, label = { Text(
                         text = "Introduce tu reseña", color = Color.White
                     )},leadingIcon = {Icon(imageVector = Icons.Default.Edit, contentDescription = "", tint = Color.White)}, colors = TextFieldDefaults.textFieldColors(containerColor = Color(35, 54, 71), textColor = Color.White))
                 }
                 Row(modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp)
+                    .padding(top = 5.dp,start = 20.dp, end = 20.dp)
                     .fillMaxWidth()
-                    .height(100.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                    Button(onClick = { userVM.anadirSerieDB {
-                        navController.navigate(Routes.mainRoute.route)
-                        userVM.obtenerListaUsuarios()
-                    } }, colors = ButtonDefaults.buttonColors(containerColor = Color(61, 102, 63))) {
+                    .height(60.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                    Button(onClick = { userVM.anadirSerieDB (
+                        {navController.navigate(Routes.mainRoute.route)
+                        userVM.obtenerListaUsuarios()},context)
+                    } , colors = ButtonDefaults.buttonColors(containerColor = Color(61, 102, 63))) {
                         Text(text = "Insertar",fontFamily = FontFamily.Serif, color = Color.White)
                         Icon(imageVector = Icons.Default.Add, contentDescription = "", modifier = Modifier.padding(start = 10.dp))
                     }

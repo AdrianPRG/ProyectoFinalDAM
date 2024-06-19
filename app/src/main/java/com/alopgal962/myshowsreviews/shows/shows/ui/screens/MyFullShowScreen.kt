@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.alopgal962.myshowsreviews.R
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.components.Topbar
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
@@ -64,7 +66,7 @@ fun MyFullShowScreen(userVM: UserVM,navController: NavController){
                 .height(80.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .border(2.dp, color = Color.Black), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Show:", color = Color.Black, fontFamily = FontFamily.Serif, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = "Show:", color = Color.Black, fontFamily = FontFamily.Serif, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 5.dp))
                 Text(text = show.titulo.toString(), modifier = Modifier.padding(10.dp) ,color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, fontSize = 16.sp,textAlign = TextAlign.Center)
             }
             Column(modifier = Modifier.fillMaxSize()) {
@@ -77,7 +79,9 @@ fun MyFullShowScreen(userVM: UserVM,navController: NavController){
                             .fillMaxHeight()
                             .width(200.dp)
                             .border(3.dp, color = Color.Black)) {
-                            AsyncImage(model = "https://image.tmdb.org/t/p/w500${show.imagen}", modifier = Modifier.fillMaxSize(), contentDescription = "Imagen show", contentScale = ContentScale.Crop)
+                            AsyncImage(model = "https://image.tmdb.org/t/p/w500${show.imagen}", error = painterResource(
+                                id = R.drawable.nodisponible
+                            ) ,modifier = Modifier.fillMaxSize(), contentDescription = "Imagen show", contentScale = ContentScale.Crop)
                         }
                         LazyColumn(modifier = Modifier.fillMaxSize()){
                             item {
@@ -94,9 +98,9 @@ fun MyFullShowScreen(userVM: UserVM,navController: NavController){
                                         Text(text = "Estadisticas de Show", modifier = Modifier.padding(10.dp), color = Color.Black, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Serif, fontSize = 15.sp, fontStyle = FontStyle.Italic)
                                     }
                                     Row(modifier = Modifier
-                                        .padding(top = 7.dp, start = 10.dp)
+                                        .padding(top = 5.dp, start = 10.dp)
                                         .fillMaxWidth()
-                                        .height(40.dp), verticalAlignment = Alignment.CenterVertically) {
+                                        .height(30.dp), verticalAlignment = Alignment.CenterVertically) {
                                         Icon(imageVector = Icons.Default.Star, contentDescription = "Icono Rating", tint = Color.Yellow, modifier = Modifier.size(30.dp,30.dp))
                                         Text(text = "Puntuacion: ${userVM.checkShowRate(show)}", modifier = Modifier.padding(start = 10.dp),color = Color.Black, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
                                     }
@@ -158,7 +162,7 @@ fun MyFullShowScreen(userVM: UserVM,navController: NavController){
                             .fillMaxSize()
                             .border(2.dp,Color.Black)){
                             item {
-                                Text(text = show.descripcion.toString(), color = Color.Black, modifier = Modifier.padding(10.dp))
+                                Text(text = show.descripcion.toString(), color = Color.Black, modifier = Modifier.padding(10.dp),fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
                             }
                         }
                     }
@@ -181,7 +185,7 @@ fun MyFullShowScreen(userVM: UserVM,navController: NavController){
                             .fillMaxSize()
                             .border(2.dp, color = Color.Black)){
                             item {
-                                Text(text = show.miresena.toString(), color = Color.Black, modifier = Modifier.padding(10.dp))
+                                Text(text = show.miresena.toString(), color = Color.Black, modifier = Modifier.padding(10.dp), fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
                             }
                         }
                     }

@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -48,9 +49,12 @@ import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 fun MyShowsScreen(uservm:UserVM,genericAndApiVM: GenericAndApiVM, navController: NavController){
     val user by uservm.user.collectAsState()
     val sort by uservm.sort.collectAsState()
+    LaunchedEffect(true){
+        uservm.recuperarSeriesUsuario()
+    }
     Scaffold (topBar = { Topbar()}, bottomBar = { BottomBar(
         onCasaClick = { navController.navigate(Routes.mainRoute.route) },
-        onSeriesClick = { uservm.recuperarSeriesUsuario()},
+        onSeriesClick = { uservm.recuperarSeriesUsuario() },
         onAmigosClick = { navController.navigate(Routes.addfriendsRoute.route)},
         onConfigClic = {navController.navigate(Routes.stadisticsRoute.route)}) }) {
         Column(modifier = Modifier

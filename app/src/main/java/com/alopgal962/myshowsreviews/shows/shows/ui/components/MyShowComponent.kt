@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.alopgal962.myshowsreviews.R
 import com.alopgal962.myshowsreviews.shows.shows.data.model.Routes
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
@@ -51,7 +53,9 @@ fun MyShow(show:ShowState,userVM: UserVM,navController: NavController){
         Column(modifier = Modifier
             .size(170.dp, 230.dp)
             .background(color = Color.Yellow)) {
-            AsyncImage(model = "https://image.tmdb.org/t/p/w500${show.imagen}", contentDescription = "Imagen Show", modifier = Modifier
+            AsyncImage(model = "https://image.tmdb.org/t/p/w500${show.imagen}", error = painterResource(
+                id = R.drawable.nodisponible
+            ) ,contentDescription = "Imagen Show", modifier = Modifier
                 .fillMaxSize()
                 .scale(1.15f, 1f))
         }
@@ -90,7 +94,6 @@ fun MyShow(show:ShowState,userVM: UserVM,navController: NavController){
                         .size(30.dp, 30.dp)
                         .clickable {
                             userVM.deletePelicula(show)
-                            userVM.recuperarSeriesUsuario()
                             userVM.obtenerListaUsuarios()
                             navController.navigate(Routes.myshowsroute.route)
                         })

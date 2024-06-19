@@ -51,7 +51,7 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
             onCasaClick = { navController.navigate(Routes.mainRoute.route) },
             onSeriesClick = { navController.navigate(Routes.myshowsroute.route) },
             onAmigosClick = { navController.navigate(Routes.addfriendsRoute.route) },
-            onConfigClic = { /*TODO*/ })
+            onConfigClic = {  })
     }) {
         Column(modifier = Modifier
             .padding(top = 110.dp, bottom = 100.dp)
@@ -86,7 +86,7 @@ fun StatisticsScreen(UserVM:UserVM, GenericAndApiVM:GenericAndApiVM, navControll
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Imagen Calificaciones", tint = Color.White, modifier = Modifier
                         .padding(end = 10.dp)
                         .size(30.dp, 30.dp))
-                    Text(text = "Puntuacion Media: ${UserVM.puntuacionmedia}",fontFamily = FontFamily.Serif, color = Color.White)
+                    Text(text = "Puntuacion Media: ${UserVM.puntuacionMedia}",fontFamily = FontFamily.Serif, color = Color.White)
                 }
             }
             Row(

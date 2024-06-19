@@ -141,7 +141,7 @@ fun ScreenSerieUsuario(userVM: UserVM,navController: NavController){
                 .padding(bottom = 40.dp)
                 .fillMaxSize()){
                 item {
-                    Text(text = show.miresena.toString(), color = Color.Black, fontSize = 13.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(7.dp))
+                    Text(text = show.miresena.toString(), color = Color.Black, fontSize = 14.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(7.dp))
                 }
             }
         }

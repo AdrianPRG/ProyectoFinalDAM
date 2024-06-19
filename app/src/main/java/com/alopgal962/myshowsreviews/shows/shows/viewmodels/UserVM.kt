@@ -2,6 +2,7 @@ package com.alopgal962.myshowsreviews.shows.shows.viewmodels
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.http.HttpException
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
@@ -13,6 +14,7 @@ import com.alopgal962.myshowsreviews.shows.shows.data.model.User
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.io.IOException
 
 @SuppressLint("MutableCollectionMutableState")
 /**
@@ -84,9 +87,7 @@ class UserVM : ViewModel() {
 
     var resena by mutableStateOf("")
 
-    var puntuacion by mutableStateOf("")
-
-    var puntuacionmedia by mutableStateOf("")
+    var puntuacion by mutableStateOf("0")
 
     var listaUsuarios by mutableStateOf(mutableListOf<User>())
 
@@ -101,6 +102,8 @@ class UserVM : ViewModel() {
     private var _serieUsuario = MutableStateFlow(ShowState())
 
     var serieUsuario = _serieUsuario.asStateFlow()
+
+    var puntuacionMedia by mutableStateOf("")
 
 
     /**
@@ -167,8 +170,11 @@ class UserVM : ViewModel() {
                 else{
                     Toast.makeText(context,"¡Uno de los campos no es correcto!",Toast.LENGTH_LONG).show()
                 }
-            } catch (e: Exception) {
-                Log.d("ERRORREGISTER", "No se pudo registrar")
+            } catch (e: HttpException) {
+                Toast.makeText(context,"No hay conexion a internet",Toast.LENGTH_LONG).show()
+            }
+            catch (e:IOException){
+                Toast.makeText(context,"No hay conexion a internet",Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -282,34 +288,32 @@ class UserVM : ViewModel() {
      *  Se llama a la funcion lambda pasada por parametros, a la funcion ResetSeriesInsert y se recuperan de nuevo las series del usuario
      *  @param navegacion se ejecuta una vez se actualiza correctamente la BD
      */
-    fun anadirSerieDB(navegacion: () -> Unit) {
+    fun anadirSerieDB(navegacion: () -> Unit,context: Context) {
         viewModelScope.launch {
             try {
-                if (resena != "" && puntuacion.toInt() >= 0 && puntuacion.toInt() <= 10) {
-                    //Se establece a la serie que se quiere insertar la puntuacion asignada
-                    var show = _showInsertar.value.copy()
-                    show.mipuntuacion = puntuacion
-                    show.miresena = resena
-                    _user.value.listaSeries?.add(show)
-                    //Se añade a la lista local la serie de usuarios
-                    Log.d(
-                        "especificaciones",
-                        _showInsertar.value.puntuacion.toString() + showInsertar.value.titulo.toString()
-                    )
-                    //Se restablecen los valores
-                    VMFireDB.collection("Usuarios")
-                        .document(VMFireAuth.currentUser?.email.toString())
-                        .update("listaSeries", _user.value.listaSeries).addOnSuccessListener {
-                        navegacion()
-                        OnExitInsert()
-                        recuperarSeriesUsuario()
-                        Log.d("inserccioncorrecta", "serie insertada")
+                    if (resena.length>=70){
+                        //Se establece a la serie que se quiere insertar la puntuacion asignada
+                        var show = _showInsertar.value.copy()
+                        show.mipuntuacion = puntuacion
+                        show.miresena = resena
+                        _user.value.listaSeries?.add(show)
+                        //Se añade a la lista local la serie de usuarios
+                        Log.d("especificaciones", _showInsertar.value.puntuacion.toString() + showInsertar.value.titulo.toString())
+                        //Se restablecen los valores
+                        VMFireDB.collection("Usuarios")
+                            .document(VMFireAuth.currentUser?.email.toString())
+                            .update("listaSeries", _user.value.listaSeries).addOnSuccessListener {
+                                navegacion()
+                                OnExitInsert()
+                                recuperarSeriesUsuario()
+                                Log.d("inserccioncorrecta", "serie insertada")
+                            }
                     }
-                } else {
-                    Log.d("ERROR-INSERCCION-SERIE", "La reseña/puntuacion no pueden ser nul@s!")
-                }
+                    else{
+                        Toast.makeText(context,"¡La reseña no es superior a 70 caracteres!",Toast.LENGTH_SHORT).show()
+                    }
             } catch (e: Exception) {
-                Log.d("ERROR-TRY-INSERCCION-SERIE", "Error al intentar añadir la serie")
+                Toast.makeText(context,"¡Ha ocurrido un error!",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -380,7 +384,7 @@ class UserVM : ViewModel() {
      */
     fun ResetSerieValues() {
         resena = ""
-        puntuacion = ""
+        puntuacion = "0"
     }
 
 
@@ -392,6 +396,7 @@ class UserVM : ViewModel() {
      */
     fun recuperarSeriesUsuario() {
         viewModelScope.launch {
+            var media = ""
             try {
                 var listatemporal = mutableListOf<ShowState>()
                 if (emaiLRegisterLogin.isNotEmpty()) {
@@ -401,7 +406,12 @@ class UserVM : ViewModel() {
                     for (show in lista) {
                         listatemporal.add(show)
                     }
+                    Log.d("puntuacion",puntuacionMedia.toString())
                     _user.value.listaSeries = listatemporal
+                    for (i in _user.value.listaSeries!!){
+                        media+= i.mipuntuacion.toString()
+                    }
+                    puntuacionMedia = (media.toInt()/_user.value.listaSeries!!.count()).toString()
                 }
             } catch (e: Exception) {
                 Log.d("ERROR-RECUPERAR", "Error al recuperar las series")

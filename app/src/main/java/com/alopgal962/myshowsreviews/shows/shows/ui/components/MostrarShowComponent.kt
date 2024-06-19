@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.alopgal962.myshowsreviews.R
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
 import com.alopgal962.myshowsreviews.shows.shows.viewmodels.UserVM
 
@@ -36,12 +38,16 @@ fun MostrarShow(Show:ShowState, oninfoclick:() -> Unit, onanadirclick:() -> Unit
         .clip(RoundedCornerShape(20.dp))
         .background(color = Color(35, 54, 71)),horizontalAlignment = Alignment.CenterHorizontally){
         Column(Modifier.size(270.dp,190.dp)) {
-            AsyncImage(model = "https://image.tmdb.org/t/p/w500${Show.imagen}", contentDescription = "${Show.titulo} / imagen", contentScale = ContentScale.FillBounds,
+            AsyncImage(model = "https://image.tmdb.org/t/p/w500${Show.imagen}", error = painterResource(
+                id = R.drawable.nodisponible
+            ),contentDescription = "${Show.titulo} / imagen", contentScale = ContentScale.FillBounds,
                modifier =  Modifier
                     .fillMaxSize())
         }
         Column(
-            Modifier.padding(top = 10.dp ).size(270.dp, 80.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Modifier
+                .padding(top = 10.dp)
+                .size(270.dp, 80.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = userVM.setShortTitle(Show), textAlign = TextAlign.Center, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold ,fontFamily = FontFamily.Serif, modifier = Modifier.padding(top = 10.dp))
             Text(text = "Puntuacion: " + userVM.checkShowRate(Show) + " ⭐ ", Modifier.padding(top = 10.dp), fontSize = 13.sp ,color = Color.White,fontFamily = FontFamily.Serif)
             Text(text = "Numero de votos: " + Show.votos, Modifier.padding(top = 10.dp) ,fontSize = 13.sp , color = Color.White,fontFamily = FontFamily.Serif)

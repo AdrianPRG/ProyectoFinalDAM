@@ -1,19 +1,20 @@
 package com.alopgal962.myshowsreviews.shows.shows.viewmodels
 
 
+import android.net.http.HttpException
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alopgal962.myshowsreviews.shows.shows.data.ShowRepository
 import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowState
-import com.alopgal962.myshowsreviews.shows.shows.ui.state.ShowsState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.random.Random
+import java.io.IOException
 
 /**
+ * @property estado Guarda el estado de true o false, dependiendo de si hay conexion a internet o no.
  * @property numpage Es un contador, que cada vez que pulsemos, se incrementará o disminuirá, servirá para ir a la siguiente pagina o a la anterior
  * @property ShowsRepository Es una instancia de la clase ShowRepository, la cual contiene las funciones de conversion y de llamamiento a la api, por medio de las funciones de GetapiService
  * @property _listaShow Es una lista que almacena los resultados de la respues de la api. Obtiene los datos de la api mediante ShowsRepository
@@ -24,6 +25,7 @@ import kotlin.random.Random
  */
 class GenericAndApiVM:ViewModel() {
 
+    var estado = MutableStateFlow(true)
 
     var numpage = getNumpageRandom()
 
@@ -41,9 +43,6 @@ class GenericAndApiVM:ViewModel() {
 
 
     //Inicializamos la funcion de obtener peliculas
-    init {
-        obtenerPeliculas(numpage)
-    }
 
     /**
      * Llama a la funcion GetShows de el repositorio, y almacena los resultados en la lista _listashow.
@@ -52,12 +51,16 @@ class GenericAndApiVM:ViewModel() {
      * */
 
     fun obtenerPeliculas(numpagina:Int) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 _listaShow.value = ShowsRepository.GetShows(numpagina).resultados
+                estado.value=true
+            } catch (e: HttpException) {
+                estado.value=false
             }
-        } catch (e: Exception) {
-            Log.d("ErrorObtener", "Error al llamar funcion de obtener peliculas")
+            catch (e:IOException){
+                estado.value=false
+            }
         }
     }
 
@@ -93,7 +96,7 @@ class GenericAndApiVM:ViewModel() {
                     numpage+=1
                }
             }
-            else if (go == false) {
+            else if (go==false) {
                 if (numpage == 1) {
                     numpage = 499
                 }
